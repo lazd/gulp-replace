@@ -4,7 +4,8 @@
   "description": "A string replace plugin for gulp",
   "main": "index.js",
   "dependencies": {
-    "event-stream": "~3.0.18"
+    "event-stream": "~3.0.18",
+    "replacestream": "0.0.6"
   },
   "devDependencies": {
     "should": "~2.1.1",

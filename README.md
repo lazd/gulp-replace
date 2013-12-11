@@ -16,7 +16,7 @@ var jshint = require('gulp-replace');
 
 gulp.task('templates', function(){
   gulp.src(['file.txt'])
-    .pipe(replace(/foo(.{3})/g, '$1foo'))
+    .pipe(replace('foo', 'bar'))
     .pipe(gulp.dest('build/file.txt'));
 });
 ```
@@ -26,18 +26,14 @@ gulp.task('templates', function(){
 ### replace(search, replace)
 
 #### search
-Type: `RegExp`
+Type: `String`
 
-The regex pattern to search for. See the [MDN documentation for RegExp] for details.
+The string to search for.
 
 #### replace
-Type: `String` or `Function`
+Type: `String`
 
-The replacement string or function. See the [MDN documentation for String.replace] for details.
-
-
-[MDN documentation for RegExp]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp
-[MDN documentation for String.replace]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace#Specifying_a_string_as_a_parameter
+The replacement string.
 
 [travis-url]: http://travis-ci.org/lazd/gulp-replace
 [travis-image]: https://secure.travis-ci.org/lazd/gulp-replace.png?branch=master
