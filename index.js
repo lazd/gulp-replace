@@ -5,7 +5,7 @@ var stream = require('stream');
 module.exports = function(search, replacement) {
   var doReplace = function(file, callback) {
     var isRegExp = search instanceof RegExp;
-    var isStream = file.contents instanceof stream.Readable;
+    var isStream = file.contents && typeof file.contents.on === 'function' && typeof file.contents.pipe === 'function';
     var isBuffer = file.contents instanceof Buffer;
 
     if (isRegExp && isStream) {
@@ -18,20 +18,20 @@ module.exports = function(search, replacement) {
 
     if (isStream) {
       file.contents = file.contents.pipe(rs(search, replacement));
-      callback(null, file);
+      return callback(null, file);
     }
-    else if (isBuffer) {
+
+    if (isBuffer) {
       if (isRegExp) {
         file.contents = new Buffer(String(file.contents).replace(search, replacement));
       }
       else {
         file.contents = new Buffer(String(file.contents).split(search).join(replacement));
       }
-      callback(null, file);
+      return callback(null, file);
     }
-    else {
-      callback(null, file);
-    }
+
+    callback(null, file);
   };
 
   return es.map(doReplace);
