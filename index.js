@@ -4,6 +4,13 @@ var stream = require('stream');
 
 module.exports = function(search, replacement) {
   var doReplace = function(file, callback) {
+
+    if (typeof search === 'function') {
+      var args = search(file);
+      search = args.search;
+      replacement = args.replacement;
+    }
+
     var isRegExp = search instanceof RegExp;
     var isStream = file.contents && typeof file.contents.on === 'function' && typeof file.contents.pipe === 'function';
     var isBuffer = file.contents instanceof Buffer;

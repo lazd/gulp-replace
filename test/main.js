@@ -142,5 +142,33 @@ describe('gulp-replace', function() {
       stream.write(file);
       stream.end();
     });
+    it('should call the function to generate the arguments, when the first argument is a function', function (done) {
+      var file = new gutil.File({
+        path: 'test/fixtures/helloworld.txt',
+        cwd: 'test/',
+        base: 'test/fixtures',
+        contents: fs.readFileSync('test/fixtures/helloworld.txt')
+      });
+
+      var stream = replacePlugin(function (file) {
+        'test/fixtures/helloworld.txt'.should.equal(file.path);
+        return {
+          search: /world/g,
+          replacement: 'person'
+        };
+      });
+
+      stream.on('data', function(newFile) {
+        should.exist(newFile);
+        should.exist(newFile.contents);
+
+        String(newFile.contents).should.equal(fs.readFileSync('test/expected/helloworld.txt', 'utf8'));
+        done();
+      });
+
+      stream.write(file);
+      stream.end();
+
+    });
   });
 });
