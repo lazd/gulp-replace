@@ -14,13 +14,12 @@ Then, add it to your `gulpfile.js`:
 ```javascript
 var replace = require('gulp-replace');
 
-gulp.task('templates', function(){
+gulp.task('templates', function () {
   gulp.src(['file.txt'])
     .pipe(replace(/foo(.{3})/g, '$1foo'))
     .pipe(gulp.dest('build/file.txt'));
 });
 ```
-
 
 ## API
 
@@ -52,6 +51,30 @@ Type: `String` or `Function`
 
 The replacement string or function. See the [MDN documentation for String.replace] for details.
 
+### replace(object)
+
+Resolve replacements using [pattern-replace](https://github.com/outaTiME/pattern-replace) module.
+
+```javascript
+var replace = require('gulp-replace');
+
+gulp.task('templates', function () {
+  gulp.src(['file.txt'])
+    .pipe(replace({
+      patterns: [
+        {
+          match: 'foo',
+          replacement: 'bar'
+        }
+      ]
+    }))
+    .pipe(gulp.dest('build/file.txt'));
+});
+```
+
+See the pattern-replace [options](https://github.com/outaTiME/pattern-replace#replacer-options).
+
+---
 
 [MDN documentation for RegExp]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp
 [MDN documentation for String.replace]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace#Specifying_a_string_as_a_parameter

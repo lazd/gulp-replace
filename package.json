@@ -1,34 +1,58 @@
 {
   "name": "gulp-replace",
-  "version": "0.2.0",
-  "description": "A string replace plugin for gulp",
-  "main": "index.js",
-  "dependencies": {
-    "event-stream": "~3.0.18",
-    "replacestream": "0.0.6"
-  },
-  "devDependencies": {
-    "should": "~2.1.1",
-    "mocha": "~1.15.1",
-    "gulp-util": "~2.0.0"
-  },
-  "scripts": {
-    "test": "./node_modules/.bin/mocha"
-  },
+  "description": "A string replace plugin for gulp.",
+  "version": "0.3.0",
+  "homepage": "https://github.com/lazd/gulp-replace",
+  "author": "Larry Davis <lazdnet@gmail.com>",
   "repository": {
     "type": "git",
     "url": "git://github.com/lazd/gulp-replace.git"
   },
-  "keywords": [
-    "gulpplugin",
-    "replace"
-  ],
-  "author": "Larry Davis <lazdnet@gmail.com>",
-  "license": "MIT",
   "bugs": {
     "url": "https://github.com/lazd/gulp-replace/issues"
   },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/lazd/gulp-replace/blob/master/LICENSE-MIT"
+    }
+  ],
   "engines": {
-    "node": ">=0.8"
-  }
+    "node": ">= 0.8.0"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "dependencies": {
+    "through2": "~0.4.0",
+    "gulp-util": "~2.2.0",
+    "replacestream": "~0.1.0",
+    "lodash": "~2.4.1",
+    "pattern-replace": "0.1.2"
+  },
+  "devDependencies": {
+    "should": "~3.1.0",
+    "mocha": "~1.18.0",
+    "event-stream": "~3.1.0"
+  },
+  "keywords": [
+    "gulpplugin",
+    "replace",
+    "replacement",
+    "pattern",
+    "patterns",
+    "match",
+    "text",
+    "string",
+    "regex",
+    "regexp",
+    "json",
+    "yaml",
+    "flatten"
+  ],
+  "main": "index.js",
+  "files": [
+    "index.js",
+    "LICENSE-MIT"
+  ]
 }

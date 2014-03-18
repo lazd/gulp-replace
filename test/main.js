@@ -123,24 +123,5 @@ describe('gulp-replace', function() {
       stream.end();
     });
 
-    it('should error when replaceing a string with a function on a stream', function(done) {
-      var file = new gutil.File({
-        path: 'test/fixtures/helloworld.txt',
-        cwd: 'test/',
-        base: 'test/fixtures',
-        contents: fs.readFileSync('test/fixtures/helloworld.txt')
-      });
-
-      var stream = replacePlugin('world', function() { return 'person'; });
-      stream.on('data', function() {
-        throw new Error('Stream should not have emitted data event');
-      });
-      stream.on('error', function(err) {
-        should.exist(err);
-        done();
-      });
-      stream.write(file);
-      stream.end();
-    });
   });
 });
