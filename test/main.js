@@ -204,5 +204,52 @@ describe('gulp-replace', function() {
       stream.write(file);
       stream.end();
     });
+
+    it('should ignore binary files when skipBinary is enabled', function(done) {
+      var file = new gutil.File({
+        path: 'test/fixtures/binary.png',
+        cwd: 'test/',
+        base: 'test/fixtures',
+        contents: fs.readFileSync('test/fixtures/binary.png')
+      });
+
+      var stream = replacePlugin('world', 'person', {skipBinary: true});
+      stream.on('data', function(newFile) {
+        should.exist(newFile);
+        should.exist(newFile.contents);
+
+        newFile.contents.should.eql(fs.readFileSync('test/expected/binary.png'));
+        done();
+      });
+
+      stream.write(file);
+      stream.end();
+    });
+
+    it('should replace string on non binary files when skipBinary is enabled', function(done) {
+      var file = new gutil.File({
+        path: 'test/fixtures/helloworld.txt',
+        cwd: 'test/',
+        base: 'test/fixtures',
+        contents: fs.createReadStream('test/fixtures/helloworld.txt')
+      });
+
+      var stream = replacePlugin('world', 'person', {skipBinary: true});
+      stream.on('data', function(newFile) {
+        should.exist(newFile);
+        should.exist(newFile.contents);
+
+        newFile.contents.pipe(es.wait(function(err, data) {
+          should.not.exist(err);
+          data.should.equal(fs.readFileSync('test/expected/helloworld.txt', 'utf8'));
+          done();
+        }));
+      });
+
+      stream.write(file);
+      stream.end();
+    });
+
+
   });
 });
