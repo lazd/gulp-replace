@@ -12,10 +12,6 @@ module.exports = function(search, replacement) {
       return callback(new Error('gulp-replace: Cannot do regexp replace on a stream'), file);
     }
 
-    if (!isRegExp && typeof replacement === 'function') {
-      return callback(new Error('gulp-replace: Cannot do string replace with a function as replacement value'), file);
-    }
-
     if (isStream) {
       file.contents = file.contents.pipe(rs(search, replacement));
       return callback(null, file);
