@@ -103,7 +103,7 @@ describe('gulp-replace', function() {
       stream.end();
     });
 
-    it('should error when replaceing a string with a function on a stream', function(done) {
+    it('should replace string on a stream with a function', function(done) {
       var file = new gutil.File({
         path: 'test/fixtures/helloworld.txt',
         cwd: 'test/',
@@ -112,18 +112,22 @@ describe('gulp-replace', function() {
       });
 
       var stream = replacePlugin('world', function() { return 'person'; });
-      stream.on('data', function() {
-        throw new Error('Stream should not have emitted data event');
+      stream.on('data', function(newFile) {
+        should.exist(newFile);
+        should.exist(newFile.contents);
+
+        newFile.contents.pipe(es.wait(function(err, data) {
+          should.not.exist(err);
+          data.should.equal(fs.readFileSync('test/expected/helloworld.txt', 'utf8'));
+          done();
+        }));
       });
-      stream.on('error', function(err) {
-        should.exist(err);
-        done();
-      });
+
       stream.write(file);
       stream.end();
     });
 
-    it('should error when replaceing a string with a function on a stream', function(done) {
+    it('should replace string on a buffer with a function', function(done) {
       var file = new gutil.File({
         path: 'test/fixtures/helloworld.txt',
         cwd: 'test/',
@@ -132,13 +136,14 @@ describe('gulp-replace', function() {
       });
 
       var stream = replacePlugin('world', function() { return 'person'; });
-      stream.on('data', function() {
-        throw new Error('Stream should not have emitted data event');
-      });
-      stream.on('error', function(err) {
-        should.exist(err);
+      stream.on('data', function(newFile) {
+        should.exist(newFile);
+        should.exist(newFile.contents);
+
+        String(newFile.contents).should.equal(fs.readFileSync('test/expected/helloworld.txt', 'utf8'));
         done();
       });
+
       stream.write(file);
       stream.end();
     });
