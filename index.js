@@ -22,7 +22,8 @@ module.exports = function(search, replacement) {
         file.contents = new Buffer(String(file.contents).replace(search, replacement));
       }
       else {
-        file.contents = new Buffer(String(file.contents).split(search).join(replacement));
+        var replaceWithString = (typeof replacement === 'function')?replacement():replacement;
+        file.contents = new Buffer(String(file.contents).split(search).join(replaceWithString));
       }
       return callback(null, file);
     }
