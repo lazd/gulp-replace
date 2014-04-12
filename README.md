@@ -57,6 +57,6 @@ The replacement string or function. See the [MDN documentation for String.replac
 [MDN documentation for String.replace]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace#Specifying_a_string_as_a_parameter
 
 [travis-url]: http://travis-ci.org/lazd/gulp-replace
-[travis-image]: https://secure.travis-ci.org/lazd/gulp-replace.png?branch=master
+[travis-image]: https://secure.travis-ci.org/lazd/gulp-replace.svg?branch=master
 [npm-url]: https://npmjs.org/package/gulp-replace
-[npm-image]: https://badge.fury.io/js/gulp-replace.png
+[npm-image]: https://badge.fury.io/js/gulp-replace.svg
