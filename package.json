@@ -1,6 +1,6 @@
 {
   "name": "gulp-replace",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "A string replace plugin for gulp",
   "main": "index.js",
   "dependencies": {
