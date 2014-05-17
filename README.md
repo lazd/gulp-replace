@@ -38,7 +38,7 @@ Type: `String` or `Function`
 
 The replacement string or function. If `replacement` is a function, it will be called once for each match and will be passed the string that is to be replaced.
 
-### replace(regex, replace)
+### replace(regex, replacement)
 
 *Note:* gulp-replace cannot perform regex replacement on streams.
 
