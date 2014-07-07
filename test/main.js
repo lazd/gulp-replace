@@ -195,5 +195,23 @@ describe('gulp-replace', function() {
       stream.write(file);
       stream.end();
     });
+
+    it('should trigger events on a stream', function(done) {
+      var file = new gutil.File({
+        path: 'test/fixtures/helloworld.txt',
+        cwd: 'test/',
+        base: 'test/fixtures',
+        contents: fs.readFileSync('test/fixtures/helloworld.txt')
+      });
+
+      var stream = replacePlugin('world', 'elephant')
+      .on('end', function() {
+        // No assertion required, we should end up here, if we don't the test will time out 
+        done();
+      });
+
+      stream.write(file);
+      stream.end();
+    });
   });
 });
