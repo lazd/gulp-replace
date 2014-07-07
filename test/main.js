@@ -178,7 +178,7 @@ describe('gulp-replace', function() {
       stream.end();
     });
 
-    it('should call function once for each replacement when replacing a string on a buffern', function(done) {
+    it('should call function once for each replacement when replacing a string on a buffer', function(done) {
       var file = new gutil.File({
         path: 'test/fixtures/helloworld.txt',
         cwd: 'test/',
@@ -198,6 +198,27 @@ describe('gulp-replace', function() {
         should.exist(newFile.contents);
 
         String(newFile.contents).should.equal(fs.readFileSync('test/expected/hellofarm.txt', 'utf8'));
+        done();
+      });
+
+      stream.write(file);
+      stream.end();
+    });
+
+    it('real world case: drop use strict on a buffer', function(done) {
+      var file = new gutil.File({
+        path: 'test/fixtures/strict.js',
+        cwd: 'test/',
+        base: 'test/fixtures',
+        contents: fs.readFileSync('test/fixtures/strict.js')
+      });
+
+      var stream = replacePlugin(/\s*(('use strict')|("use strict"));?/g, '');
+      stream.on('data', function(newFile) {
+        should.exist(newFile);
+        should.exist(newFile.contents);
+
+        String(newFile.contents).should.equal(fs.readFileSync('test/expected/strict.js', 'utf8'));
         done();
       });
 
