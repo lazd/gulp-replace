@@ -26,7 +26,7 @@ gulp.task('templates', function(){
 
 gulp-replace can be called with a string or regex.
 
-### replace(string, replacement)
+### replace(string, replacement[, options])
 
 #### string
 Type: `String`
@@ -38,7 +38,7 @@ Type: `String` or `Function`
 
 The replacement string or function. If `replacement` is a function, it will be called once for each match and will be passed the string that is to be replaced.
 
-### replace(regex, replacement)
+### replace(regex, replacement[, options])
 
 *Note:* gulp-replace cannot perform regex replacement on streams.
 
@@ -51,6 +51,20 @@ The regex pattern to search for. See the [MDN documentation for RegExp] for deta
 Type: `String` or `Function`
 
 The replacement string or function. See the [MDN documentation for String.replace] for details.
+
+### gulp-replace options
+
+An optional third argument, `options`, can be passed.
+
+#### options
+Type: `Object`
+
+##### options.skipBinary
+Type: `boolean`  
+Default: `false`
+
+Skip binary files
+
 
 [MDN documentation for RegExp]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp
 [MDN documentation for String.replace]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace#Specifying_a_string_as_a_parameter
