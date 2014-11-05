@@ -53,6 +53,30 @@ describe('gulp-replace', function() {
       stream.end();
     });
 
+    it('should replace regex on a stream', function(done) {
+      var file = new gutil.File({
+        path: 'test/fixtures/helloworld.txt',
+        cwd: 'test/',
+        base: 'test/fixtures',
+        contents: fs.createReadStream('test/fixtures/helloworld.txt')
+      });
+
+      var stream = replacePlugin(/world/g, 'person');
+      stream.on('data', function(newFile) {
+        should.exist(newFile);
+        should.exist(newFile.contents);
+
+        newFile.contents.pipe(es.wait(function(err, data) {
+          should.not.exist(err);
+          data.should.equal(fs.readFileSync('test/expected/helloworld.txt', 'utf8'));
+          done();
+        }));
+      });
+
+      stream.write(file);
+      stream.end();
+    });
+
     it('should replace regex on a buffer', function(done) {
       var file = new gutil.File({
         path: 'test/fixtures/helloworld.txt',
@@ -74,7 +98,7 @@ describe('gulp-replace', function() {
       stream.end();
     });
 
-    it('should error when searching with regex on a stream', function(done) {
+    it('should replace regex on a stream with a function', function(done) {
       var file = new gutil.File({
         path: 'test/fixtures/helloworld.txt',
         cwd: 'test/',
@@ -82,14 +106,39 @@ describe('gulp-replace', function() {
         contents: fs.createReadStream('test/fixtures/helloworld.txt')
       });
 
-      var stream = replacePlugin(/world/, 'person');
-      stream.on('data', function() {
-        throw new Error('Stream should not have emitted data event');
+      var stream = replacePlugin(/world/g, function() { return 'person'; });
+      stream.on('data', function(newFile) {
+        should.exist(newFile);
+        should.exist(newFile.contents);
+
+        newFile.contents.pipe(es.wait(function(err, data) {
+          should.not.exist(err);
+          data.should.equal(fs.readFileSync('test/expected/helloworld.txt', 'utf8'));
+          done();
+        }));
       });
-      stream.on('error', function(err) {
-        should.exist(err);
+
+      stream.write(file);
+      stream.end();
+    });
+
+    it('should replace regex on a buffer with a function', function(done) {
+      var file = new gutil.File({
+        path: 'test/fixtures/helloworld.txt',
+        cwd: 'test/',
+        base: 'test/fixtures',
+        contents: fs.readFileSync('test/fixtures/helloworld.txt')
+      });
+
+      var stream = replacePlugin(/world/g, function() { return 'person'; });
+      stream.on('data', function(newFile) {
+        should.exist(newFile);
+        should.exist(newFile.contents);
+
+        String(newFile.contents).should.equal(fs.readFileSync('test/expected/helloworld.txt', 'utf8'));
         done();
       });
+
       stream.write(file);
       stream.end();
     });
@@ -139,7 +188,7 @@ describe('gulp-replace', function() {
       stream.end();
     });
 
-    it('should replace string on a stream with a function', function(done) {
+    it('should call function once for each replacement when replacing a string on a stream', function(done) {
       var file = new gutil.File({
         path: 'test/fixtures/helloworld.txt',
         cwd: 'test/',
@@ -154,6 +203,36 @@ describe('gulp-replace', function() {
         'person'
       ];
       var stream = replacePlugin('world', function() { return replacements.shift(); });
+      stream.on('data', function(newFile) {
+        should.exist(newFile);
+        should.exist(newFile.contents);
+
+        newFile.contents.pipe(es.wait(function(err, data) {
+          should.not.exist(err);
+          data.should.equal(fs.readFileSync('test/expected/hellofarm.txt', 'utf8'));
+          done();
+        }));
+      });
+
+      stream.write(file);
+      stream.end();
+    });
+
+    it('should call function once for each replacement when replacing a regex on a stream', function(done) {
+      var file = new gutil.File({
+        path: 'test/fixtures/helloworld.txt',
+        cwd: 'test/',
+        base: 'test/fixtures',
+        contents: fs.createReadStream('test/fixtures/helloworld.txt')
+      });
+
+      var replacements = [
+        'cow',
+        'chicken',
+        'duck',
+        'person'
+      ];
+      var stream = replacePlugin(/world/g, function() { return replacements.shift(); });
       stream.on('data', function(newFile) {
         should.exist(newFile);
         should.exist(newFile.contents);
@@ -184,6 +263,33 @@ describe('gulp-replace', function() {
         'person'
       ];
       var stream = replacePlugin('world', function() { return replacements.shift(); });
+      stream.on('data', function(newFile) {
+        should.exist(newFile);
+        should.exist(newFile.contents);
+
+        String(newFile.contents).should.equal(fs.readFileSync('test/expected/hellofarm.txt', 'utf8'));
+        done();
+      });
+
+      stream.write(file);
+      stream.end();
+    });
+
+    it('should call function once for each replacement when replacing a regex on a buffer', function(done) {
+      var file = new gutil.File({
+        path: 'test/fixtures/helloworld.txt',
+        cwd: 'test/',
+        base: 'test/fixtures',
+        contents: fs.readFileSync('test/fixtures/helloworld.txt')
+      });
+
+      var replacements = [
+        'cow',
+        'chicken',
+        'duck',
+        'person'
+      ];
+      var stream = replacePlugin(/world/g, function() { return replacements.shift(); });
       stream.on('data', function(newFile) {
         should.exist(newFile);
         should.exist(newFile.contents);

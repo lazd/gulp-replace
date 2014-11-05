@@ -9,10 +9,6 @@ module.exports = function(search, replacement, options) {
     var isStream = file.contents && typeof file.contents.on === 'function' && typeof file.contents.pipe === 'function';
     var isBuffer = file.contents instanceof Buffer;
 
-    if (isRegExp && isStream) {
-      return callback(new Error('gulp-replace: Cannot do regexp replace on a stream'), file);
-    }
-
     function doReplace() {
       if (isStream) {
         file.contents = file.contents.pipe(rs(search, replacement));
