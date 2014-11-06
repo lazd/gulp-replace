@@ -40,8 +40,6 @@ The replacement string or function. If `replacement` is a function, it will be c
 
 ### replace(regex, replacement[, options])
 
-*Note:* gulp-replace cannot perform regex replacement on streams.
-
 #### regex
 Type: `RegExp`
 
