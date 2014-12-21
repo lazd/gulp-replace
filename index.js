@@ -1,6 +1,5 @@
 var es = require('event-stream');
 var rs = require('replacestream');
-var stream = require('stream');
 var istextorbinary = require('istextorbinary');
 
 // Escape regexp characters
@@ -10,27 +9,21 @@ function escapeRegExp(string){
 }
 
 module.exports = function(search, replacement, options) {
-  var doReplace = function(file, callback) {
-    var isRegExp = search instanceof RegExp;
+  return es.map(function(file, callback) {
+    var searchIsString = typeof search === 'string' || search instanceof String
     var isStream = file.contents && typeof file.contents.on === 'function' && typeof file.contents.pipe === 'function';
     var isBuffer = file.contents instanceof Buffer;
 
     function doReplace() {
       if (isStream) {
         file.contents = file.contents.pipe(rs(search, replacement));
-        return callback(null, file);
-      }
-
-      if (isBuffer) {
-        if (!isRegExp) {
+      } else if (isBuffer) {
+        if (searchIsString) {
         	search = new RegExp(escapeRegExp(search), 'g');
         }
         file.contents = new Buffer(String(file.contents).replace(search, replacement));
-        return callback(null, file);
       }
-
       callback(null, file);
-
     }
 
     if (options && options.skipBinary) {
@@ -50,7 +43,5 @@ module.exports = function(search, replacement, options) {
       doReplace();
     }
 
-  };
-
-  return es.map(doReplace);
+  });
 };
