@@ -3,6 +3,12 @@ var rs = require('replacestream');
 var stream = require('stream');
 var istextorbinary = require('istextorbinary');
 
+// Escape regexp characters
+// From: http://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions#Using_Special_Characters
+function escapeRegExp(string){
+  return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
 module.exports = function(search, replacement, options) {
   var doReplace = function(file, callback) {
     var isRegExp = search instanceof RegExp;
@@ -16,36 +22,10 @@ module.exports = function(search, replacement, options) {
       }
 
       if (isBuffer) {
-        if (isRegExp) {
-          file.contents = new Buffer(String(file.contents).replace(search, replacement));
+        if (!isRegExp) {
+        	search = new RegExp(escapeRegExp(search), 'g');
         }
-        else {
-          var chunks = String(file.contents).split(search);
-
-          var result;
-          if (typeof replacement === 'function') {
-            // Start with the first chunk already in the result
-            // Replacements will be added thereafter
-            // This is done to avoid checking the value of i in the loop
-            result = [ chunks[0] ];
-
-            // The replacement function should be called once for each match
-            for (var i = 1; i < chunks.length; i++) {
-              // Add the replacement value
-              result.push(replacement(search));
-
-              // Add the next chunk
-              result.push(chunks[i]);
-            }
-
-            result = result.join('');
-          }
-          else {
-            result = chunks.join(replacement);
-          }
-
-          file.contents = new Buffer(result);
-        }
+        file.contents = new Buffer(String(file.contents).replace(search, replacement));
         return callback(null, file);
       }
 
