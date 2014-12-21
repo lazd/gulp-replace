@@ -23,25 +23,16 @@ module.exports = function(search, replacement, options) {
         }
         file.contents = new Buffer(String(file.contents).replace(search, replacement));
       }
-      callback(null, file);
     }
 
     if (options && options.skipBinary) {
-      istextorbinary.isText('', file.contents, function(err, result) {
-        if (err) {
-          return callback(err, file);
-        }
-        
-        if (!result) {
-          return callback(null, file);
-        } else {
-          doReplace();
-        }
-      });
-    } 
-    else {
-      doReplace();
+      var skip = istextorbinary.isBinarySync(file.path, file.contents);
+      if (skip) {
+        return callback(skip instanceof Error ? skip : null, file);
+      }
     }
 
+    doReplace();
+    callback(null, file);
   });
 };
