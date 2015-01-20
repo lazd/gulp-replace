@@ -9,7 +9,6 @@ module.exports = function(search, replacement, options) {
   }
 
   var doReplace = function(file, callback) {
-    var isRegExp = search instanceof RegExp;
     var isStream = file.contents && typeof file.contents.on === 'function' && typeof file.contents.pipe === 'function';
     var isBuffer = file.contents instanceof Buffer;
 
@@ -20,6 +19,8 @@ module.exports = function(search, replacement, options) {
           replacement = fileReplacement;
         });
       }
+      
+      var isRegExp = search instanceof RegExp;
 
       if (isStream) {
         file.contents = file.contents.pipe(rs(search, replacement));
