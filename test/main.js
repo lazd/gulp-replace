@@ -302,6 +302,56 @@ describe('gulp-replace', function() {
       stream.end();
     });
 
+    it('should replace string on a stream with a generator', function(done) {
+      var file = new gutil.File({
+        path: 'test/fixtures/hellofile.txt',
+        cwd: 'test/',
+        base: 'test/fixtures',
+        contents: fs.createReadStream('test/fixtures/hellofile.txt')
+      });
+
+      var stream = replacePlugin(function(filepath, replaceInFile) {
+        replaceInFile(path.basename(filepath, '.txt'), 'person');
+      });
+      stream.on('data', function(newFile) {
+        should.exist(newFile);
+        should.exist(newFile.contents);
+
+        newFile.contents.pipe(es.wait(function(err, data) {
+          should.not.exist(err);
+          data.should.equal(fs.readFileSync('test/expected/helloworld.txt', 'utf8'));
+          done();
+        }));
+      });
+
+      stream.write(file);
+      stream.end();
+    });
+
+    it('should replace string on a buffer with a generator', function(done) {
+      var file = new gutil.File({
+        path: 'test/fixtures/hellofile.txt',
+        cwd: 'test/',
+        base: 'test/fixtures',
+        contents: fs.readFileSync('test/fixtures/hellofile.txt')
+      });
+
+      var stream = replacePlugin(function(filepath, replaceInFile) {
+        replaceInFile(path.basename(filepath, '.txt'), 'person');
+      });
+      stream.on('data', function(newFile) {
+        should.exist(newFile);
+        should.exist(newFile.contents);
+
+        String(newFile.contents).should.equal(fs.readFileSync('test/expected/helloworld.txt', 'utf8'));
+        done();
+      });
+
+      stream.write(file);
+      stream.end();
+    });
+
+
     it('should ignore binary files when skipBinary is enabled', function(done) {
       var file = new gutil.File({
         path: 'test/fixtures/binary.png',
@@ -311,6 +361,29 @@ describe('gulp-replace', function() {
       });
 
       var stream = replacePlugin('world', 'person', {skipBinary: true});
+      stream.on('data', function(newFile) {
+        should.exist(newFile);
+        should.exist(newFile.contents);
+
+        newFile.contents.should.eql(fs.readFileSync('test/expected/binary.png'));
+        done();
+      });
+
+      stream.write(file);
+      stream.end();
+    });
+
+    it('should ignore binary files when skipBinary is enabled with a generator', function(done) {
+      var file = new gutil.File({
+        path: 'test/fixtures/binary.png',
+        cwd: 'test/',
+        base: 'test/fixtures',
+        contents: fs.readFileSync('test/fixtures/binary.png')
+      });
+
+      var stream = replacePlugin(function(filepath, replaceInFile) {
+        replaceInFile(path.basename(filepath, '.txt'), 'person');
+      }, {skipBinary: true});
       stream.on('data', function(newFile) {
         should.exist(newFile);
         should.exist(newFile.contents);
@@ -357,7 +430,7 @@ describe('gulp-replace', function() {
 
       var stream = replacePlugin('world', 'elephant')
       .on('end', function() {
-        // No assertion required, we should end up here, if we don't the test will time out 
+        // No assertion required, we should end up here, if we don't the test will time out
         done();
       });
 

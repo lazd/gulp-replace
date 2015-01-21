@@ -4,12 +4,24 @@ var stream = require('stream');
 var istextorbinary = require('istextorbinary');
 
 module.exports = function(search, replacement, options) {
+  if (typeof search  === 'function') {
+    options = replacement;
+  }
+
   var doReplace = function(file, callback) {
-    var isRegExp = search instanceof RegExp;
     var isStream = file.contents && typeof file.contents.on === 'function' && typeof file.contents.pipe === 'function';
     var isBuffer = file.contents instanceof Buffer;
 
     function doReplace() {
+      if (typeof search  === 'function') {
+        search(file.path, function(fileSearch, fileReplacement) {
+          search = fileSearch;
+          replacement = fileReplacement;
+        });
+      }
+      
+      var isRegExp = search instanceof RegExp;
+
       if (isStream) {
         file.contents = file.contents.pipe(rs(search, replacement));
         return callback(null, file);
@@ -58,14 +70,14 @@ module.exports = function(search, replacement, options) {
         if (err) {
           return callback(err, file);
         }
-        
+
         if (!result) {
           return callback(null, file);
         } else {
           doReplace();
         }
       });
-    } 
+    }
     else {
       doReplace();
     }

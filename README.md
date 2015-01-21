@@ -18,6 +18,10 @@ gulp.task('templates', function(){
   gulp.src(['file.txt'])
     .pipe(replace(/foo(.{3})/g, '$1foo'))
     .pipe(gulp.dest('build/file.txt'));
+
+  gulp.src('*.coffee')
+    .pipe(replace(function(filepath, replaceInFile){ replaceInFile('foo', filepath ); }))
+    .pipe(gulp.dest('build/file.txt'));
 });
 ```
 
@@ -50,6 +54,13 @@ Type: `String` or `Function`
 
 The replacement string or function. See the [MDN documentation for String.replace] for details.
 
+## replace(generator [, options])
+
+#### generator
+Type: `Function`
+
+A function that will be passed the filepath and a function to be call with what to search and replace for in that file
+
 ### gulp-replace options
 
 An optional third argument, `options`, can be passed.
@@ -58,7 +69,7 @@ An optional third argument, `options`, can be passed.
 Type: `Object`
 
 ##### options.skipBinary
-Type: `boolean`  
+Type: `boolean`
 Default: `false`
 
 Skip binary files

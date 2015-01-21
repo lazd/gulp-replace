@@ -1,0 +1,4 @@
+Hello old hellofile!
+Hello new hellofile!
+Hello kind hellofile!
+Hello cruel hellofile!
