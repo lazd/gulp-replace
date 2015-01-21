@@ -5,7 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "event-stream": "3.2.1",
-    "replacestream": "1.0.2",
+    "replacestream": "2.0.0",
     "istextorbinary": "1.0.2"
   },
   "devDependencies": {
