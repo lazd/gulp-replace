@@ -356,7 +356,7 @@ describe('gulp-replace', function() {
       });
 
       var stream = replacePlugin('world', 'elephant')
-      .on('end', function() {
+      .on('finish', function() {
         // No assertion required, we should end up here, if we don't the test will time out 
         done();
       });

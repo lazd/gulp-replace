@@ -2,11 +2,10 @@
   "name": "gulp-replace",
   "version": "0.5.2",
   "description": "A string replace plugin for gulp",
-  "main": "index.js",
   "dependencies": {
-    "event-stream": "3.2.1",
-    "replacestream": "2.0.0",
-    "istextorbinary": "1.0.2"
+    "istextorbinary": "1.0.2",
+    "replacestream": "^2.0.0",
+    "through2": "^0.6.3"
   },
   "devDependencies": {
     "should": "^4.6.0",
@@ -14,7 +13,7 @@
     "gulp-util": "^3.0.2"
   },
   "scripts": {
-    "test": "./node_modules/.bin/mocha"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",

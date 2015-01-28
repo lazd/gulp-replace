@@ -1,22 +1,23 @@
-var es = require('event-stream');
+'use strict';
+
+var through = require('through2');
 var rs = require('replacestream');
-var stream = require('stream');
 var istextorbinary = require('istextorbinary');
 
 module.exports = function(search, replacement, options) {
-  var doReplace = function(file, callback) {
-    var isRegExp = search instanceof RegExp;
-    var isStream = file.contents && typeof file.contents.on === 'function' && typeof file.contents.pipe === 'function';
-    var isBuffer = file.contents instanceof Buffer;
+  var doReplace = function(file, enc, callback) {
+    if (file.isNull()) {
+      return callback(null, file);
+    }
 
     function doReplace() {
-      if (isStream) {
+      if (file.isStream()) {
         file.contents = file.contents.pipe(rs(search, replacement));
         return callback(null, file);
       }
 
-      if (isBuffer) {
-        if (isRegExp) {
+      if (file.isBuffer()) {
+        if (search instanceof RegExp) {
           file.contents = new Buffer(String(file.contents).replace(search, replacement));
         }
         else {
@@ -50,7 +51,6 @@ module.exports = function(search, replacement, options) {
       }
 
       callback(null, file);
-
     }
 
     if (options && options.skipBinary) {
@@ -60,17 +60,17 @@ module.exports = function(search, replacement, options) {
         }
         
         if (!result) {
-          return callback(null, file);
+          callback(null, file);
         } else {
           doReplace();
         }
       });
-    } 
-    else {
-      doReplace();
-    }
 
+      return;
+    } 
+
+    doReplace();
   };
 
-  return es.map(doReplace);
+  return through.obj(doReplace);
 };
