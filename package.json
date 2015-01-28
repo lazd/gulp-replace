@@ -8,9 +8,10 @@
     "through2": "^0.6.3"
   },
   "devDependencies": {
-    "should": "^4.6.0",
+    "event-stream": "^3.2.1",
     "mocha": "^2.1.0",
-    "gulp-util": "^3.0.2"
+    "should": "^4.6.0",
+    "vinyl": "^0.4.6"
   },
   "scripts": {
     "test": "mocha"
