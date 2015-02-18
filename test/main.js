@@ -1,15 +1,16 @@
+'use strict';
+
 var replacePlugin = require('../');
 var fs = require('fs');
-var path = require('path');
 var es = require('event-stream');
 var should = require('should');
-var gutil = require('gulp-util');
+var File = require('vinyl');
 require('mocha');
 
 describe('gulp-replace', function() {
   describe('replacePlugin()', function() {
     it('should replace string on a stream', function(done) {
-      var file = new gutil.File({
+      var file = new File({
         path: 'test/fixtures/helloworld.txt',
         cwd: 'test/',
         base: 'test/fixtures',
@@ -33,7 +34,7 @@ describe('gulp-replace', function() {
     });
 
     it('should replace string on a buffer', function(done) {
-      var file = new gutil.File({
+      var file = new File({
         path: 'test/fixtures/helloworld.txt',
         cwd: 'test/',
         base: 'test/fixtures',
@@ -54,7 +55,7 @@ describe('gulp-replace', function() {
     });
 
     it('should replace regex on a stream', function(done) {
-      var file = new gutil.File({
+      var file = new File({
         path: 'test/fixtures/helloworld.txt',
         cwd: 'test/',
         base: 'test/fixtures',
@@ -78,7 +79,7 @@ describe('gulp-replace', function() {
     });
 
     it('should replace regex on a buffer', function(done) {
-      var file = new gutil.File({
+      var file = new File({
         path: 'test/fixtures/helloworld.txt',
         cwd: 'test/',
         base: 'test/fixtures',
@@ -99,7 +100,7 @@ describe('gulp-replace', function() {
     });
 
     it('should replace regex on a stream with a function', function(done) {
-      var file = new gutil.File({
+      var file = new File({
         path: 'test/fixtures/helloworld.txt',
         cwd: 'test/',
         base: 'test/fixtures',
@@ -123,7 +124,7 @@ describe('gulp-replace', function() {
     });
 
     it('should replace regex on a buffer with a function', function(done) {
-      var file = new gutil.File({
+      var file = new File({
         path: 'test/fixtures/helloworld.txt',
         cwd: 'test/',
         base: 'test/fixtures',
@@ -144,7 +145,7 @@ describe('gulp-replace', function() {
     });
 
     it('should replace string on a stream with a function', function(done) {
-      var file = new gutil.File({
+      var file = new File({
         path: 'test/fixtures/helloworld.txt',
         cwd: 'test/',
         base: 'test/fixtures',
@@ -168,7 +169,7 @@ describe('gulp-replace', function() {
     });
 
     it('should replace string on a buffer with a function', function(done) {
-      var file = new gutil.File({
+      var file = new File({
         path: 'test/fixtures/helloworld.txt',
         cwd: 'test/',
         base: 'test/fixtures',
@@ -189,7 +190,7 @@ describe('gulp-replace', function() {
     });
 
     it('should call function once for each replacement when replacing a string on a stream', function(done) {
-      var file = new gutil.File({
+      var file = new File({
         path: 'test/fixtures/helloworld.txt',
         cwd: 'test/',
         base: 'test/fixtures',
@@ -219,7 +220,7 @@ describe('gulp-replace', function() {
     });
 
     it('should call function once for each replacement when replacing a regex on a stream', function(done) {
-      var file = new gutil.File({
+      var file = new File({
         path: 'test/fixtures/helloworld.txt',
         cwd: 'test/',
         base: 'test/fixtures',
@@ -249,7 +250,7 @@ describe('gulp-replace', function() {
     });
 
     it('should call function once for each replacement when replacing a string on a buffer', function(done) {
-      var file = new gutil.File({
+      var file = new File({
         path: 'test/fixtures/helloworld.txt',
         cwd: 'test/',
         base: 'test/fixtures',
@@ -276,7 +277,7 @@ describe('gulp-replace', function() {
     });
 
     it('should call function once for each replacement when replacing a regex on a buffer', function(done) {
-      var file = new gutil.File({
+      var file = new File({
         path: 'test/fixtures/helloworld.txt',
         cwd: 'test/',
         base: 'test/fixtures',
@@ -303,7 +304,7 @@ describe('gulp-replace', function() {
     });
 
     it('should ignore binary files when skipBinary is enabled', function(done) {
-      var file = new gutil.File({
+      var file = new File({
         path: 'test/fixtures/binary.png',
         cwd: 'test/',
         base: 'test/fixtures',
@@ -324,7 +325,7 @@ describe('gulp-replace', function() {
     });
 
     it('should replace string on non binary files when skipBinary is enabled', function(done) {
-      var file = new gutil.File({
+      var file = new File({
         path: 'test/fixtures/helloworld.txt',
         cwd: 'test/',
         base: 'test/fixtures',
@@ -348,7 +349,7 @@ describe('gulp-replace', function() {
     });
 
     it('should trigger events on a stream', function(done) {
-      var file = new gutil.File({
+      var file = new File({
         path: 'test/fixtures/helloworld.txt',
         cwd: 'test/',
         base: 'test/fixtures',
@@ -356,7 +357,7 @@ describe('gulp-replace', function() {
       });
 
       var stream = replacePlugin('world', 'elephant')
-      .on('end', function() {
+      .on('finish', function() {
         // No assertion required, we should end up here, if we don't the test will time out 
         done();
       });

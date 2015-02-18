@@ -1,15 +1,15 @@
+'use strict';
+
 var replacePlugin = require('../');
 var fs = require('fs');
-var path = require('path');
-var es = require('event-stream');
 var should = require('should');
-var gutil = require('gulp-util');
+var File = require('vinyl');
 require('mocha');
 
 describe('gulp-replace', function() {
   describe('real world use cases', function() {
     it('drop use strict on a buffer', function(done) {
-      var file = new gutil.File({
+      var file = new File({
         path: 'test/fixtures/strict.js',
         cwd: 'test/',
         base: 'test/fixtures',
@@ -30,7 +30,7 @@ describe('gulp-replace', function() {
     });
 
     it('replace script versions in HTML', function(done) {
-      var file = new gutil.File({
+      var file = new File({
         path: 'test/fixtures/scriptpage.html',
         cwd: 'test/',
         base: 'test/fixtures',
