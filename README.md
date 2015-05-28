@@ -11,7 +11,7 @@ npm install --save-dev gulp-replace
 
 Then, add it to your `gulpfile.js`:
 
-For Regex
+### Regex Replace
 ```javascript
 var replace = require('gulp-replace');
 
@@ -21,13 +21,13 @@ gulp.task('templates', function(){
     .pipe(gulp.dest('build/file.txt'));
 });
 ```
-For strings
+### String Replace
 ```javascript
 var replace = require('gulp-replace');
 
 gulp.task('templates', function(){
   gulp.src(['file.txt'])
-    .pipe(replace('{3}', 'foo'))
+    .pipe(replace('bar', 'foo'))
     .pipe(gulp.dest('build/file.txt'));
 });
 ```
