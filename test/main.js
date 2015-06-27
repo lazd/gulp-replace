@@ -1,11 +1,10 @@
 'use strict';
 
+var concatStream = require('concat-stream');
 var replacePlugin = require('../');
 var fs = require('fs');
-var es = require('event-stream');
 var should = require('should');
 var File = require('vinyl');
-require('mocha');
 
 describe('gulp-replace', function() {
   describe('replacePlugin()', function() {
@@ -22,8 +21,7 @@ describe('gulp-replace', function() {
         should.exist(newFile);
         should.exist(newFile.contents);
 
-        newFile.contents.pipe(es.wait(function(err, data) {
-          should.not.exist(err);
+        newFile.contents.pipe(concatStream({encoding: 'string'}, function(data) {
           data.should.equal(fs.readFileSync('test/expected/helloworld.txt', 'utf8'));
           done();
         }));
@@ -67,8 +65,7 @@ describe('gulp-replace', function() {
         should.exist(newFile);
         should.exist(newFile.contents);
 
-        newFile.contents.pipe(es.wait(function(err, data) {
-          should.not.exist(err);
+        newFile.contents.pipe(concatStream({encoding: 'string'}, function(data) {
           data.should.equal(fs.readFileSync('test/expected/helloworld.txt', 'utf8'));
           done();
         }));
@@ -112,8 +109,7 @@ describe('gulp-replace', function() {
         should.exist(newFile);
         should.exist(newFile.contents);
 
-        newFile.contents.pipe(es.wait(function(err, data) {
-          should.not.exist(err);
+        newFile.contents.pipe(concatStream({encoding: 'string'}, function(data) {
           data.should.equal(fs.readFileSync('test/expected/helloworld.txt', 'utf8'));
           done();
         }));
@@ -157,8 +153,7 @@ describe('gulp-replace', function() {
         should.exist(newFile);
         should.exist(newFile.contents);
 
-        newFile.contents.pipe(es.wait(function(err, data) {
-          should.not.exist(err);
+        newFile.contents.pipe(concatStream({encoding: 'string'}, function(data) {
           data.should.equal(fs.readFileSync('test/expected/helloworld.txt', 'utf8'));
           done();
         }));
@@ -208,8 +203,7 @@ describe('gulp-replace', function() {
         should.exist(newFile);
         should.exist(newFile.contents);
 
-        newFile.contents.pipe(es.wait(function(err, data) {
-          should.not.exist(err);
+        newFile.contents.pipe(concatStream({encoding: 'string'}, function(data) {
           data.should.equal(fs.readFileSync('test/expected/hellofarm.txt', 'utf8'));
           done();
         }));
@@ -238,8 +232,7 @@ describe('gulp-replace', function() {
         should.exist(newFile);
         should.exist(newFile.contents);
 
-        newFile.contents.pipe(es.wait(function(err, data) {
-          should.not.exist(err);
+        newFile.contents.pipe(concatStream({encoding: 'string'}, function(data) {
           data.should.equal(fs.readFileSync('test/expected/hellofarm.txt', 'utf8'));
           done();
         }));
@@ -337,8 +330,7 @@ describe('gulp-replace', function() {
         should.exist(newFile);
         should.exist(newFile.contents);
 
-        newFile.contents.pipe(es.wait(function(err, data) {
-          should.not.exist(err);
+        newFile.contents.pipe(concatStream({encoding: 'string'}, function(data) {
           data.should.equal(fs.readFileSync('test/expected/helloworld.txt', 'utf8'));
           done();
         }));

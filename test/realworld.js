@@ -4,7 +4,6 @@ var replacePlugin = require('../');
 var fs = require('fs');
 var should = require('should');
 var File = require('vinyl');
-require('mocha');
 
 describe('gulp-replace', function() {
   describe('real world use cases', function() {
