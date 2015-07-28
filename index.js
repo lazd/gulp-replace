@@ -56,11 +56,11 @@ module.exports = function(search, replacement, options) {
       }
 
       if (options && options.skipBinary) {
-        istextorbinary.isText('', file.contents, function(err, result) {
+        istextorbinary.isText(file.path, file.contents, function(err, result) {
           if (err) {
             return callback(err, file);
           }
-        
+
           if (!result) {
             callback(null, file);
           } else {
@@ -69,7 +69,7 @@ module.exports = function(search, replacement, options) {
         });
 
         return;
-      } 
+      }
 
       doReplace();
     }
