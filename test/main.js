@@ -127,9 +127,6 @@ describe('gulp-replace', function() {
       it('should replace string on a stream', function(done) {
         var stream = replacePlugin('world', 'person');
         stream.on('data', function(newFile) {
-          should.exist(newFile);
-          should.exist(newFile.contents);
-
           newFile.contents.pipe(concatStream({encoding: 'string'}, function(data) {
             data.should.equal(fs.readFileSync('test/expected/helloworld.txt', 'utf8'));
             done();
@@ -143,9 +140,6 @@ describe('gulp-replace', function() {
       it('should replace regex on a stream', function(done) {
         var stream = replacePlugin(/world/g, 'person');
         stream.on('data', function(newFile) {
-          should.exist(newFile);
-          should.exist(newFile.contents);
-
           newFile.contents.pipe(concatStream({encoding: 'string'}, function(data) {
             data.should.equal(fs.readFileSync('test/expected/helloworld.txt', 'utf8'));
             done();
@@ -159,9 +153,6 @@ describe('gulp-replace', function() {
       it('should replace regex on a stream with a function', function(done) {
         var stream = replacePlugin(/world/g, function() { return 'person'; });
         stream.on('data', function(newFile) {
-          should.exist(newFile);
-          should.exist(newFile.contents);
-
           newFile.contents.pipe(concatStream({encoding: 'string'}, function(data) {
             data.should.equal(fs.readFileSync('test/expected/helloworld.txt', 'utf8'));
             done();
@@ -175,9 +166,6 @@ describe('gulp-replace', function() {
       it('should replace string on a stream with a function', function(done) {
         var stream = replacePlugin('world', function() { return 'person'; });
         stream.on('data', function(newFile) {
-          should.exist(newFile);
-          should.exist(newFile.contents);
-
           newFile.contents.pipe(concatStream({encoding: 'string'}, function(data) {
             data.should.equal(fs.readFileSync('test/expected/helloworld.txt', 'utf8'));
             done();
@@ -197,9 +185,6 @@ describe('gulp-replace', function() {
         ];
         var stream = replacePlugin('world', function() { return replacements.shift(); });
         stream.on('data', function(newFile) {
-          should.exist(newFile);
-          should.exist(newFile.contents);
-
           newFile.contents.pipe(concatStream({encoding: 'string'}, function(data) {
             data.should.equal(fs.readFileSync('test/expected/hellofarm.txt', 'utf8'));
             done();
@@ -219,9 +204,6 @@ describe('gulp-replace', function() {
         ];
         var stream = replacePlugin(/world/g, function() { return replacements.shift(); });
         stream.on('data', function(newFile) {
-          should.exist(newFile);
-          should.exist(newFile.contents);
-
           newFile.contents.pipe(concatStream({encoding: 'string'}, function(data) {
             data.should.equal(fs.readFileSync('test/expected/hellofarm.txt', 'utf8'));
             done();
