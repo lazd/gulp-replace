@@ -340,7 +340,7 @@ describe('gulp-replace', function() {
       stream.end();
     });
 
-    it('should trigger events on a stream', function(done) {
+    it('should trigger events on a buffer', function(done) {
       var file = new File({
         path: 'test/fixtures/helloworld.txt',
         cwd: 'test/',
@@ -350,7 +350,7 @@ describe('gulp-replace', function() {
 
       var stream = replacePlugin('world', 'elephant')
       .on('finish', function() {
-        // No assertion required, we should end up here, if we don't the test will time out 
+        // No assertion required, we should end up here, if we don't the test will time out
         done();
       });
 
