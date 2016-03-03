@@ -112,164 +112,126 @@ describe('gulp-replace', function() {
       });
     });
 
-    it('should replace string on a stream', function(done) {
-      var file = new File({
-        path: 'test/fixtures/helloworld.txt',
-        cwd: 'test/',
-        base: 'test/fixtures',
-        contents: fs.createReadStream('test/fixtures/helloworld.txt')
+    describe('streamed input', function () {
+      var file;
+
+      beforeEach(function () {
+        file = new File({
+            path: 'test/fixtures/helloworld.txt',
+            cwd: 'test/',
+            base: 'test/fixtures',
+            contents: fs.createReadStream('test/fixtures/helloworld.txt')
+          });
       });
 
-      var stream = replacePlugin('world', 'person');
-      stream.on('data', function(newFile) {
-        should.exist(newFile);
-        should.exist(newFile.contents);
+      it('should replace string on a stream', function(done) {
+        var stream = replacePlugin('world', 'person');
+        stream.on('data', function(newFile) {
+          should.exist(newFile);
+          should.exist(newFile.contents);
 
-        newFile.contents.pipe(concatStream({encoding: 'string'}, function(data) {
-          data.should.equal(fs.readFileSync('test/expected/helloworld.txt', 'utf8'));
-          done();
-        }));
+          newFile.contents.pipe(concatStream({encoding: 'string'}, function(data) {
+            data.should.equal(fs.readFileSync('test/expected/helloworld.txt', 'utf8'));
+            done();
+          }));
+        });
+
+        stream.write(file);
+        stream.end();
       });
 
-      stream.write(file);
-      stream.end();
+      it('should replace regex on a stream', function(done) {
+        var stream = replacePlugin(/world/g, 'person');
+        stream.on('data', function(newFile) {
+          should.exist(newFile);
+          should.exist(newFile.contents);
+
+          newFile.contents.pipe(concatStream({encoding: 'string'}, function(data) {
+            data.should.equal(fs.readFileSync('test/expected/helloworld.txt', 'utf8'));
+            done();
+          }));
+        });
+
+        stream.write(file);
+        stream.end();
+      });
+
+      it('should replace regex on a stream with a function', function(done) {
+        var stream = replacePlugin(/world/g, function() { return 'person'; });
+        stream.on('data', function(newFile) {
+          should.exist(newFile);
+          should.exist(newFile.contents);
+
+          newFile.contents.pipe(concatStream({encoding: 'string'}, function(data) {
+            data.should.equal(fs.readFileSync('test/expected/helloworld.txt', 'utf8'));
+            done();
+          }));
+        });
+
+        stream.write(file);
+        stream.end();
+      });
+
+      it('should replace string on a stream with a function', function(done) {
+        var stream = replacePlugin('world', function() { return 'person'; });
+        stream.on('data', function(newFile) {
+          should.exist(newFile);
+          should.exist(newFile.contents);
+
+          newFile.contents.pipe(concatStream({encoding: 'string'}, function(data) {
+            data.should.equal(fs.readFileSync('test/expected/helloworld.txt', 'utf8'));
+            done();
+          }));
+        });
+
+        stream.write(file);
+        stream.end();
+      });
+
+      it('should call function once for each replacement when replacing a string on a stream', function(done) {
+        var replacements = [
+          'cow',
+          'chicken',
+          'duck',
+          'person'
+        ];
+        var stream = replacePlugin('world', function() { return replacements.shift(); });
+        stream.on('data', function(newFile) {
+          should.exist(newFile);
+          should.exist(newFile.contents);
+
+          newFile.contents.pipe(concatStream({encoding: 'string'}, function(data) {
+            data.should.equal(fs.readFileSync('test/expected/hellofarm.txt', 'utf8'));
+            done();
+          }));
+        });
+
+        stream.write(file);
+        stream.end();
+      });
+
+      it('should call function once for each replacement when replacing a regex on a stream', function(done) {
+        var replacements = [
+          'cow',
+          'chicken',
+          'duck',
+          'person'
+        ];
+        var stream = replacePlugin(/world/g, function() { return replacements.shift(); });
+        stream.on('data', function(newFile) {
+          should.exist(newFile);
+          should.exist(newFile.contents);
+
+          newFile.contents.pipe(concatStream({encoding: 'string'}, function(data) {
+            data.should.equal(fs.readFileSync('test/expected/hellofarm.txt', 'utf8'));
+            done();
+          }));
+        });
+
+        stream.write(file);
+        stream.end();
+      });
     });
-
-    it('should replace regex on a stream', function(done) {
-      var file = new File({
-        path: 'test/fixtures/helloworld.txt',
-        cwd: 'test/',
-        base: 'test/fixtures',
-        contents: fs.createReadStream('test/fixtures/helloworld.txt')
-      });
-
-      var stream = replacePlugin(/world/g, 'person');
-      stream.on('data', function(newFile) {
-        should.exist(newFile);
-        should.exist(newFile.contents);
-
-        newFile.contents.pipe(concatStream({encoding: 'string'}, function(data) {
-          data.should.equal(fs.readFileSync('test/expected/helloworld.txt', 'utf8'));
-          done();
-        }));
-      });
-
-      stream.write(file);
-      stream.end();
-    });
-
-
-    it('should replace regex on a stream with a function', function(done) {
-      var file = new File({
-        path: 'test/fixtures/helloworld.txt',
-        cwd: 'test/',
-        base: 'test/fixtures',
-        contents: fs.createReadStream('test/fixtures/helloworld.txt')
-      });
-
-      var stream = replacePlugin(/world/g, function() { return 'person'; });
-      stream.on('data', function(newFile) {
-        should.exist(newFile);
-        should.exist(newFile.contents);
-
-        newFile.contents.pipe(concatStream({encoding: 'string'}, function(data) {
-          data.should.equal(fs.readFileSync('test/expected/helloworld.txt', 'utf8'));
-          done();
-        }));
-      });
-
-      stream.write(file);
-      stream.end();
-    });
-
-
-
-    it('should replace string on a stream with a function', function(done) {
-      var file = new File({
-        path: 'test/fixtures/helloworld.txt',
-        cwd: 'test/',
-        base: 'test/fixtures',
-        contents: fs.createReadStream('test/fixtures/helloworld.txt')
-      });
-
-      var stream = replacePlugin('world', function() { return 'person'; });
-      stream.on('data', function(newFile) {
-        should.exist(newFile);
-        should.exist(newFile.contents);
-
-        newFile.contents.pipe(concatStream({encoding: 'string'}, function(data) {
-          data.should.equal(fs.readFileSync('test/expected/helloworld.txt', 'utf8'));
-          done();
-        }));
-      });
-
-      stream.write(file);
-      stream.end();
-    });
-
-
-
-    it('should call function once for each replacement when replacing a string on a stream', function(done) {
-      var file = new File({
-        path: 'test/fixtures/helloworld.txt',
-        cwd: 'test/',
-        base: 'test/fixtures',
-        contents: fs.createReadStream('test/fixtures/helloworld.txt')
-      });
-
-      var replacements = [
-        'cow',
-        'chicken',
-        'duck',
-        'person'
-      ];
-      var stream = replacePlugin('world', function() { return replacements.shift(); });
-      stream.on('data', function(newFile) {
-        should.exist(newFile);
-        should.exist(newFile.contents);
-
-        newFile.contents.pipe(concatStream({encoding: 'string'}, function(data) {
-          data.should.equal(fs.readFileSync('test/expected/hellofarm.txt', 'utf8'));
-          done();
-        }));
-      });
-
-      stream.write(file);
-      stream.end();
-    });
-
-    it('should call function once for each replacement when replacing a regex on a stream', function(done) {
-      var file = new File({
-        path: 'test/fixtures/helloworld.txt',
-        cwd: 'test/',
-        base: 'test/fixtures',
-        contents: fs.createReadStream('test/fixtures/helloworld.txt')
-      });
-
-      var replacements = [
-        'cow',
-        'chicken',
-        'duck',
-        'person'
-      ];
-      var stream = replacePlugin(/world/g, function() { return replacements.shift(); });
-      stream.on('data', function(newFile) {
-        should.exist(newFile);
-        should.exist(newFile.contents);
-
-        newFile.contents.pipe(concatStream({encoding: 'string'}, function(data) {
-          data.should.equal(fs.readFileSync('test/expected/hellofarm.txt', 'utf8'));
-          done();
-        }));
-      });
-
-      stream.write(file);
-      stream.end();
-    });
-
-
-
-
 
     it('should ignore binary files when skipBinary is enabled', function(done) {
       var file = new File({
