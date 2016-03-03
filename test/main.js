@@ -8,6 +8,17 @@ var File = require('vinyl');
 
 describe('gulp-replace', function() {
   describe('replacePlugin()', function() {
+    var replacements;
+
+    beforeEach(function () {
+      replacements = [
+        'cow',
+        'chicken',
+        'duck',
+        'person'
+      ];
+    });
+
     describe('buffered input', function () {
       var file;
 
@@ -66,12 +77,6 @@ describe('gulp-replace', function() {
 
 
       it('should call function once for each replacement when replacing a string on a buffer', function(done) {
-        var replacements = [
-          'cow',
-          'chicken',
-          'duck',
-          'person'
-        ];
         var stream = replacePlugin('world', function() { return replacements.shift(); });
         stream.on('data', function(newFile) {
           String(newFile.contents).should.equal(fs.readFileSync('test/expected/hellofarm.txt', 'utf8'));
@@ -84,12 +89,6 @@ describe('gulp-replace', function() {
 
 
       it('should call function once for each replacement when replacing a regex on a buffer', function(done) {
-        var replacements = [
-          'cow',
-          'chicken',
-          'duck',
-          'person'
-        ];
         var stream = replacePlugin(/world/g, function() { return replacements.shift(); });
         stream.on('data', function(newFile) {
           String(newFile.contents).should.equal(fs.readFileSync('test/expected/hellofarm.txt', 'utf8'));
@@ -177,12 +176,6 @@ describe('gulp-replace', function() {
       });
 
       it('should call function once for each replacement when replacing a string on a stream', function(done) {
-        var replacements = [
-          'cow',
-          'chicken',
-          'duck',
-          'person'
-        ];
         var stream = replacePlugin('world', function() { return replacements.shift(); });
         stream.on('data', function(newFile) {
           newFile.contents.pipe(concatStream({encoding: 'string'}, function(data) {
@@ -196,12 +189,6 @@ describe('gulp-replace', function() {
       });
 
       it('should call function once for each replacement when replacing a regex on a stream', function(done) {
-        var replacements = [
-          'cow',
-          'chicken',
-          'duck',
-          'person'
-        ];
         var stream = replacePlugin(/world/g, function() { return replacements.shift(); });
         stream.on('data', function(newFile) {
           newFile.contents.pipe(concatStream({encoding: 'string'}, function(data) {
