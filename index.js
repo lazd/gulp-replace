@@ -55,20 +55,29 @@ module.exports = function(search, replacement, options) {
         callback(null, file);
       }
 
-      if (options && options.skipBinary) {
-        istextorbinary.isText(file.path, file.contents, function(err, result) {
-          if (err) {
-            return callback(err, file);
+      if (options) {
+        if (options.passFilename && typeof replacement === 'function') {
+          var userReplacement = replacement;
+          replacement = function (match) {
+            userReplacement(match, file.path);
           }
+        }
 
-          if (!result) {
-            callback(null, file);
-          } else {
-            doReplace();
-          }
-        });
+        if (options.skipBinary) {
+          istextorbinary.isText(file.path, file.contents, function(err, result) {
+            if (err) {
+              return callback(err, file);
+            }
 
-        return;
+            if (!result) {
+              callback(null, file);
+            } else {
+              doReplace();
+            }
+          });
+
+          return;
+        }
       }
 
       doReplace();
