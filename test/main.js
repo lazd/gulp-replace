@@ -204,6 +204,12 @@ describe('gulp-replace', function() {
 
     describe('options', function () {
       describe('skipBinary', function () {
+        var stream;
+
+        beforeEach(function () {
+          stream = replacePlugin('world', 'person', {skipBinary: true});
+        });
+
         it('should ignore binary files when skipBinary is enabled', function(done) {
           var file = new File({
             path: 'test/fixtures/binary.png',
@@ -212,7 +218,6 @@ describe('gulp-replace', function() {
             contents: fs.readFileSync('test/fixtures/binary.png')
           });
 
-          var stream = replacePlugin('world', 'person', {skipBinary: true});
           stream.on('data', function(newFile) {
             newFile.contents.should.eql(fs.readFileSync('test/expected/binary.png'));
             done();
@@ -230,7 +235,6 @@ describe('gulp-replace', function() {
             contents: fs.createReadStream('test/fixtures/helloworld.txt')
           });
 
-          var stream = replacePlugin('world', 'person', {skipBinary: true});
           stream.on('data', function(newFile) {
             newFile.contents.pipe(concatStream({encoding: 'string'}, function(data) {
               data.should.equal(fs.readFileSync('test/expected/helloworld.txt', 'utf8'));
