@@ -25,8 +25,6 @@ describe('gulp-replace', function() {
       beforeEach(function () {
         file = new File({
           path: 'test/fixtures/helloworld.txt',
-          cwd: 'test/',
-          base: 'test/fixtures',
           contents: fs.readFileSync('test/fixtures/helloworld.txt')
         });
       });
@@ -117,8 +115,6 @@ describe('gulp-replace', function() {
       beforeEach(function () {
         file = new File({
             path: 'test/fixtures/helloworld.txt',
-            cwd: 'test/',
-            base: 'test/fixtures',
             contents: fs.createReadStream('test/fixtures/helloworld.txt')
           });
       });
