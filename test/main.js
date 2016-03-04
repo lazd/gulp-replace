@@ -177,8 +177,6 @@ describe('gulp-replace', function() {
         it('should ignore binary files when skipBinary is enabled', function(done) {
           var file = new File({
             path: 'test/fixtures/binary.png',
-            cwd: 'test/',
-            base: 'test/fixtures',
             contents: fs.readFileSync('test/fixtures/binary.png')
           });
 
@@ -194,8 +192,6 @@ describe('gulp-replace', function() {
         it('should replace string on non binary files when skipBinary is enabled', function(done) {
           var file = new File({
             path: 'test/fixtures/helloworld.txt',
-            cwd: 'test/',
-            base: 'test/fixtures',
             contents: fs.createReadStream('test/fixtures/helloworld.txt')
           });
 
