@@ -60,7 +60,7 @@ module.exports = function(search, replacement, options) {
           var userReplacement = replacement;
           replacement = function (match) {
             userReplacement(match, file.path);
-          }
+          };
         }
 
         if (options.skipBinary) {
