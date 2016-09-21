@@ -10,6 +10,28 @@ describe('gulp-replace', function() {
   describe('replacePlugin()', function() {
     var replacements;
 
+    var checkBuffered = function (file, stream, done, cb) {
+      stream.on('data', function (newFile) {
+        cb(newFile);
+        done();
+      });
+
+      stream.write(file);
+      stream.end();
+    };
+
+    var checkStreamed = function (file, stream, done, cb) {
+      stream.on('data', function(newFile) {
+        newFile.contents.pipe(concatStream({encoding: 'string'}, function(data) {
+          cb(data);
+          done();
+        }));
+      });
+
+      stream.write(file);
+      stream.end();
+    };
+
     beforeEach(function () {
       replacements = [
         'cow',
@@ -20,29 +42,19 @@ describe('gulp-replace', function() {
     });
 
     describe('buffered input', function () {
-      var file, check;
+      var file;
 
       beforeEach(function () {
         file = new File({
           path: 'test/fixtures/helloworld.txt',
           contents: fs.readFileSync('test/fixtures/helloworld.txt')
         });
-
-        check = function (stream, done, cb) {
-          stream.on('data', function (newFile) {
-            cb(newFile);
-            done();
-          });
-
-          stream.write(file);
-          stream.end();
-        };
       });
 
       it('should replace string on a buffer', function(done) {
         var stream = replacePlugin('world', 'person');
 
-        check(stream, done, function (newFile) {
+        checkBuffered(file, stream, done, function (newFile) {
           String(newFile.contents).should.equal(fs.readFileSync('test/expected/helloworld.txt', 'utf8'));
         });
       });
@@ -50,7 +62,7 @@ describe('gulp-replace', function() {
       it('should replace regex on a buffer', function(done) {
         var stream = replacePlugin(/world/g, 'person');
 
-        check(stream, done, function (newFile) {
+        checkBuffered(file, stream, done, function (newFile) {
           String(newFile.contents).should.equal(fs.readFileSync('test/expected/helloworld.txt', 'utf8'));
         });
       });
@@ -58,7 +70,7 @@ describe('gulp-replace', function() {
       it('should replace regex on a buffer with a function', function(done) {
         var stream = replacePlugin(/world/g, function() { return 'person'; });
 
-        check(stream, done, function (newFile) {
+        checkBuffered(file, stream, done, function (newFile) {
           String(newFile.contents).should.equal(fs.readFileSync('test/expected/helloworld.txt', 'utf8'));
         });
       });
@@ -66,7 +78,7 @@ describe('gulp-replace', function() {
       it('should replace string on a buffer with a function', function(done) {
         var stream = replacePlugin('world', function() { return 'person'; });
 
-        check(stream, done, function (newFile) {
+        checkBuffered(file, stream, done, function (newFile) {
           String(newFile.contents).should.equal(fs.readFileSync('test/expected/helloworld.txt', 'utf8'));
         });
       });
@@ -74,8 +86,7 @@ describe('gulp-replace', function() {
 
       it('should call function once for each replacement when replacing a string on a buffer', function(done) {
         var stream = replacePlugin('world', function() { return replacements.shift(); });
-        check(stream, done, function (newFile) {
-
+        checkBuffered(file, stream, done, function (newFile) {
           String(newFile.contents).should.equal(fs.readFileSync('test/expected/hellofarm.txt', 'utf8'));
         });
       });
@@ -84,7 +95,7 @@ describe('gulp-replace', function() {
       it('should call function once for each replacement when replacing a regex on a buffer', function(done) {
         var stream = replacePlugin(/world/g, function() { return replacements.shift(); });
 
-        check(stream, done, function (newFile) {
+        checkBuffered(file, stream, done, function (newFile) {
           String(newFile.contents).should.equal(fs.readFileSync('test/expected/hellofarm.txt', 'utf8'));
         });
       });
@@ -102,66 +113,82 @@ describe('gulp-replace', function() {
     });
 
     describe('streamed input', function () {
-      var file, check;
+      var file;
 
       beforeEach(function () {
         file = new File({
           path: 'test/fixtures/helloworld.txt',
           contents: fs.createReadStream('test/fixtures/helloworld.txt')
         });
-
-        check = function (stream, done, cb) {
-          stream.on('data', function(newFile) {
-            newFile.contents.pipe(concatStream({encoding: 'string'}, function(data) {
-              cb(data);
-              done();
-            }));
-          });
-
-          stream.write(file);
-          stream.end();
-        };
       });
 
       it('should replace string on a stream', function(done) {
         var stream = replacePlugin('world', 'person');
-        check(stream, done, function (data) {
+        checkStreamed(file, stream, done, function (data) {
           data.should.equal(fs.readFileSync('test/expected/helloworld.txt', 'utf8'));
         });
       });
 
       it('should replace regex on a stream', function(done) {
         var stream = replacePlugin(/world/g, 'person');
-        check(stream, done, function (data) {
+        checkStreamed(file, stream, done, function (data) {
           data.should.equal(fs.readFileSync('test/expected/helloworld.txt', 'utf8'));
         });
       });
 
       it('should replace regex on a stream with a function', function(done) {
         var stream = replacePlugin(/world/g, function() { return 'person'; });
-        check(stream, done, function (data) {
+        checkStreamed(file, stream, done, function (data) {
           data.should.equal(fs.readFileSync('test/expected/helloworld.txt', 'utf8'));
         });
       });
 
       it('should replace string on a stream with a function', function(done) {
         var stream = replacePlugin('world', function() { return 'person'; });
-        check(stream, done, function (data) {
+        checkStreamed(file, stream, done, function (data) {
           data.should.equal(fs.readFileSync('test/expected/helloworld.txt', 'utf8'));
         });
       });
 
       it('should call function once for each replacement when replacing a string on a stream', function(done) {
         var stream = replacePlugin('world', function() { return replacements.shift(); });
-        check(stream, done, function (data) {
+        checkStreamed(file, stream, done, function (data) {
           data.should.equal(fs.readFileSync('test/expected/hellofarm.txt', 'utf8'));
         });
       });
 
       it('should call function once for each replacement when replacing a regex on a stream', function(done) {
         var stream = replacePlugin(/world/g, function() { return replacements.shift(); });
-        check(stream, done, function (data) {
+        checkStreamed(file, stream, done, function (data) {
           data.should.equal(fs.readFileSync('test/expected/hellofarm.txt', 'utf8'));
+        });
+      });
+    });
+
+    describe('special cases', function() {
+      it('should replace empty lines on a buffer', function(done) {
+        var stream = replacePlugin(/^\s*\n/gm, '\n');
+
+        var file = new File({
+          path: 'test/fixtures/blank.txt',
+          contents: fs.readFileSync('test/fixtures/blank.txt')
+        });
+
+        checkBuffered(file, stream, done, function (newFile) {
+          String(newFile.contents).should.equal(fs.readFileSync('test/expected/blank.txt', 'utf8'));
+        });
+      });
+
+      it('should replace empty lines on a stream', function(done) {
+        var stream = replacePlugin(/^\s*\n/gm, '');
+
+        var file = new File({
+          path: 'test/fixtures/blank.txt',
+          contents: fs.createReadStream('test/fixtures/blank.txt')
+        });
+
+        checkStreamed(file, stream, done, function (data) {
+          data.should.equal(fs.readFileSync('test/expected/blank.txt', 'utf8'));
         });
       });
     });
