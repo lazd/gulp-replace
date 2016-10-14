@@ -21,6 +21,19 @@ gulp.task('templates', function(){
     .pipe(gulp.dest('build/file.txt'));
 });
 ```
+### Use FilePath
+```javascript
+var replace = require('gulp-replace');
+
+gulp.task('templates', function(){
+  gulp.src(['file.txt'])
+    .pipe(replace(/foo(.{3})/g, function($0, str){
+		return str + 'foo' + this.filePath;
+	}, {passFilename: true}))
+    .pipe(gulp.dest('build/file.txt'));
+});
+```
+
 ### String Replace
 ```javascript
 var replace = require('gulp-replace');
@@ -61,6 +74,8 @@ Type: `String` or `Function`
 
 The replacement string or function. See the [MDN documentation for String.replace] for details.
 
+if `Function` and `options.passFileName` is true, then Function within the filePath is equal to the current file `file.path`.
+
 ### gulp-replace options
 
 An optional third argument, `options`, can be passed.
@@ -69,10 +84,16 @@ An optional third argument, `options`, can be passed.
 Type: `Object`
 
 ##### options.skipBinary
-Type: `boolean`  
+Type: `boolean`
 Default: `false`
 
 Skip binary files
+
+##### options.passFileName
+Type: `boolean`
+Default: `false`
+
+Passes full file path to the replacement function
 
 
 [MDN documentation for RegExp]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp
