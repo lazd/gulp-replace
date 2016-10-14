@@ -29,7 +29,7 @@ gulp.task('templates', function(){
   gulp.src(['file.txt'])
     .pipe(replace(/foo(.{3})/g, function($0, str){
 		return str + 'foo' + this.filePath;
-	}, {passFilename: true}))
+	}, {passFileName: true}))
     .pipe(gulp.dest('build/file.txt'));
 });
 ```
