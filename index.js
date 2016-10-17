@@ -57,13 +57,20 @@ module.exports = function(search, replacement, options) {
 
       if (options) {
         if (options.passFileName && typeof replacement === 'function') {
-          var userReplacement = replacement;
-          replacement = function () {
-            var context = {
-              filePath: file.path
-            };
-            return userReplacement.apply(context, arguments);
+          /* var context = {
+            filePath: file.path
           };
+          replacement = replacement.bind(context); */
+
+          var userReplacement = replacement;
+          replacement = (function(){
+            return function (path) {
+              var context = {
+                filePath: path
+              };
+              return userReplacement.apply(context, arguments);
+            };
+          })(file.path);
         }
 
         if(options.skipBinary) {
