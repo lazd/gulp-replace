@@ -63,8 +63,8 @@ module.exports = function(search, replacement, options) {
           replacement = replacement.bind(context); */
 
           var userReplacement = replacement;
-          replacement = (function(){
-            return function (path) {
+          replacement = (function(path){
+            return function () {
               var context = {
                 filePath: path
               };
