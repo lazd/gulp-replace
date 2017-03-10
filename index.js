@@ -35,7 +35,7 @@ module.exports = function(search, replacement, options) {
               // The replacement function should be called once for each match
               for (var i = 1; i < chunks.length; i++) {
                 // Add the replacement value
-                result.push(replacement(search));
+                result.push(replacement(search, file.path));
 
                 // Add the next chunk
                 result.push(chunks[i]);
