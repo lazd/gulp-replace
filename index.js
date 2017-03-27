@@ -5,6 +5,8 @@ var rs = require('replacestream');
 var istextorbinary = require('istextorbinary');
 
 module.exports = function(search, replacement, options) {
+  var userReplacement = replacement;
+
   return new Transform({
     objectMode: true,
     transform: function(file, enc, callback) {
@@ -57,20 +59,19 @@ module.exports = function(search, replacement, options) {
 
       if (options) {
         if (options.passFileName && typeof replacement === 'function') {
-          /* var context = {
+          var context = {
             filePath: file.path
           };
-          replacement = replacement.bind(context); */
+          replacement = userReplacement.bind(context);
 
-          var userReplacement = replacement;
-          replacement = (function(path){
-            return function () {
-              var context = {
-                filePath: path
-              };
-              return userReplacement.apply(context, arguments);
-            };
-          })(file.path);
+          // replacement = (function(path){
+          //   return function () {
+          //     var context = {
+          //       filePath: path
+          //     };
+          //     return userReplacement.apply(context, arguments);
+          //   };
+          // })(file.path);
         }
 
         if(options.skipBinary) {
