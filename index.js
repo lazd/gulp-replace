@@ -4,14 +4,20 @@ var Transform = require('readable-stream/transform');
 var rs = require('replacestream');
 var istextorbinary = require('istextorbinary');
 
-module.exports = function(search, replacement, options) {
+module.exports = function(search, replacement_, options) {
   return new Transform({
     objectMode: true,
     transform: function(file, enc, callback) {
       if (file.isNull()) {
         return callback(null, file);
       }
-
+      
+      if (typeof replacement_ === 'function') {
+        var replacement = replacement_.bind({file:file});
+      }else{
+        var replacement = replacement_;
+      }
+      
       function doReplace() {
         if (file.isStream()) {
           file.contents = file.contents.pipe(rs(search, replacement));
