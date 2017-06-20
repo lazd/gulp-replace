@@ -1,6 +1,6 @@
 {
   "name": "gulp-replace",
-  "version": "0.5.4",
+  "version": "0.6.0",
   "description": "A string replace plugin for gulp",
   "dependencies": {
     "istextorbinary": "1.0.2",
