@@ -4,7 +4,7 @@ var Transform = require('readable-stream/transform');
 var rs = require('replacestream');
 var istextorbinary = require('istextorbinary');
 
-module.exports = function(search, replacement_, options) {
+module.exports = function(search, replacement, options) {
   return new Transform({
     objectMode: true,
     transform: function(file, enc, callback) {
@@ -12,10 +12,9 @@ module.exports = function(search, replacement_, options) {
         return callback(null, file);
       }
       
-      if (typeof replacement_ === 'function') {
-        var replacement = replacement_.bind({file:file});
-      }else{
-        var replacement = replacement_;
+      if (typeof replacement === 'function') {
+        // Pass the vinyl file object as this.file
+        replacement = replacement.bind({ file: file });
       }
       
       function doReplace() {

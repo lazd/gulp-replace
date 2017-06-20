@@ -106,6 +106,7 @@ describe('gulp-replace', function() {
 
       beforeEach(function () {
         file = new File({
+          base: 'test/fixtures/',
           path: 'test/fixtures/helloworld.txt',
           contents: fs.createReadStream('test/fixtures/helloworld.txt')
         });
@@ -121,6 +122,35 @@ describe('gulp-replace', function() {
           stream.write(file);
           stream.end();
         };
+      });
+
+      it('should have this.file set to the vinyl file object', function(done) {
+        var stream = replacePlugin('world', function() {
+          this.file.should.equal(file);
+          return 'person';
+        });
+        check(stream, done, function (data) {
+          data.should.equal(fs.readFileSync('test/expected/helloworld.txt', 'utf8'));
+        });
+      });
+
+      it('should have this.file set to the vinyl file object for regex replaces', function(done) {
+        var stream = replacePlugin(/world/g, function() {
+          this.file.should.equal(file);
+          return 'person';
+        });
+        check(stream, done, function (data) {
+          data.should.equal(fs.readFileSync('test/expected/helloworld.txt', 'utf8'));
+        });
+      });
+
+      it('should replace filenames', function(done) {
+        var stream = replacePlugin('world', function() {
+          return this.file.relative;
+        });
+        check(stream, done, function (data) {
+          data.should.equal(fs.readFileSync('test/expected/hellofilename.txt', 'utf8'));
+        });
       });
 
       it('should replace string on a stream', function(done) {
