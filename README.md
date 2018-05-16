@@ -122,9 +122,9 @@ Type: `Object`
 
 ##### options.skipBinary
 Type: `boolean`  
-Default: `false`
+Default: `true`
 
-Skip binary files
+Skip binary files. This option is true by default. If you want to replace content in binary files, you must explicitly set it to false
 
 
 [MDN documentation for RegExp]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp

@@ -236,6 +236,23 @@ describe('gulp-replace', function() {
           stream.end();
         });
 
+        it('should be true by default', function(done) {
+          stream = replacePlugin('world', 'person');
+
+          var file = new File({
+            path: 'test/fixtures/binary.png',
+            contents: fs.readFileSync('test/fixtures/binary.png')
+          });
+
+          stream.on('data', function(newFile) {
+            newFile.contents.should.eql(fs.readFileSync('test/expected/binary.png'));
+            done();
+          });
+
+          stream.write(file);
+          stream.end();
+        });
+
       });
     });
   });
