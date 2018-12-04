@@ -28,7 +28,7 @@ var replace = require('gulp-replace');
 
 gulp.task('templates', function(){
   gulp.src(['file.txt'])
-    // See http://mdn.io/string.replace#Specifying_a_string_as_a_parameter
+    // See https://mdn.io/string.replace#Specifying_a_string_as_a_parameter
     .pipe(replace(/foo(.{3})/g, '$1foo'))
     .pipe(gulp.dest('build/'));
 });
@@ -56,7 +56,7 @@ gulp.task('templates', function(){
   gulp.src(['file.txt'])
     .pipe(replace(/foo(.{3})/g, function(match, p1, offset, string) {
       // Replace foobaz with barbaz and log a ton of information
-      // See http://mdn.io/string.replace#Specifying_a_function_as_a_parameter
+      // See https://mdn.io/string.replace#Specifying_a_function_as_a_parameter
       console.log('Found ' + match + ' with param ' + p1 + ' at ' + offset + ' inside of ' + string);
       return 'bar' + p1;
     }))
@@ -130,7 +130,7 @@ Skip binary files. This option is true by default. If you want to replace conten
 [MDN documentation for RegExp]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp
 [MDN documentation for String.replace]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace#Specifying_a_string_as_a_parameter
 
-[travis-url]: http://travis-ci.org/lazd/gulp-replace
+[travis-url]: https://travis-ci.org/lazd/gulp-replace
 [travis-image]: https://secure.travis-ci.org/lazd/gulp-replace.svg?branch=master
 [npm-url]: https://npmjs.org/package/gulp-replace
 [npm-image]: https://badge.fury.io/js/gulp-replace.svg
