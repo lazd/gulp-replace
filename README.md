@@ -1,5 +1,5 @@
 # gulp-replace [![NPM version][npm-image]][npm-url] [![Build status][travis-image]][travis-url]
-> A string replace plugin for gulp 3
+> A string replace plugin for gulp
 
 ## Usage
 
@@ -13,7 +13,7 @@ Then, add it to your `gulpfile.js`:
 
 ### Simple string replace
 ```javascript
-var replace = require('gulp-replace');
+const replace = require('gulp-replace');
 
 gulp.task('templates', function(){
   gulp.src(['file.txt'])
@@ -24,7 +24,7 @@ gulp.task('templates', function(){
 
 ### Simple regex replace
 ```javascript
-var replace = require('gulp-replace');
+const replace = require('gulp-replace');
 
 gulp.task('templates', function(){
   gulp.src(['file.txt'])
@@ -36,7 +36,7 @@ gulp.task('templates', function(){
 
 ### String replace with function callback
 ```javascript
-var replace = require('gulp-replace');
+const replace = require('gulp-replace');
 
 gulp.task('templates', function(){
   gulp.src(['file.txt'])
@@ -50,7 +50,7 @@ gulp.task('templates', function(){
 
 ### Regex replace with function callback
 ```javascript
-var replace = require('gulp-replace');
+const replace = require('gulp-replace');
 
 gulp.task('templates', function(){
   gulp.src(['file.txt'])
@@ -66,7 +66,7 @@ gulp.task('templates', function(){
 
 ### Function callback with file object
 ```javascript
-var replace = require('gulp-replace');
+const replace = require('gulp-replace');
 
 gulp.task('templates', function(){
   gulp.src(['file.txt'])
@@ -83,7 +83,7 @@ gulp.task('templates', function(){
 
 ## API
 
-gulp-replace can be called with a string or regex.
+`gulp-replace` can be called with a string or regex.
 
 ### replace(string, replacement[, options])
 
@@ -124,7 +124,7 @@ Type: `Object`
 Type: `boolean`  
 Default: `true`
 
-Skip binary files. This option is true by default. If you want to replace content in binary files, you must explicitly set it to false
+Skip binary files. This option is `true` by default. If you want to replace content in binary files, you must explicitly set it to `false`.
 
 
 [MDN documentation for RegExp]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp
