@@ -1,5 +1,5 @@
 var gulp = require('gulp');
-/** REMOVE ME **/ var replace = require('../../');
+/** REMOVE ME **/ var replace = require('../../index');
 /** USE ME **/ // var replace = require('gulp-replace');
 
 gulp.task('replace', function() {

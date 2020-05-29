@@ -1,9 +1,9 @@
 'use strict';
 
-var replacePlugin = require('../');
-var fs = require('fs');
-var should = require('should');
-var File = require('vinyl');
+const replacePlugin = require('../');
+const fs = require('fs');
+const should = require('should');
+const File = require('vinyl');
 
 describe('gulp-replace', function() {
   describe('real world use cases', function() {
