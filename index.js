@@ -1,6 +1,6 @@
 'use strict';
 
-var Transform = require('readable-stream/transform');
+var Transform = require('readable-stream').Transform;
 var rs = require('replacestream');
 var istextorbinary = require('istextorbinary');
 
