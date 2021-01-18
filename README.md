@@ -1,4 +1,5 @@
 # gulp-replace [![NPM version][npm-image]][npm-url] [![Build status][travis-image]][travis-url]
+
 > A string replace plugin for gulp
 
 ## Usage
@@ -7,11 +8,16 @@ First, install `gulp-replace` as a development dependency:
 
 ```shell
 npm install --save-dev gulp-replace
+# or
+yarn add --dev gulp-replace
 ```
 
 Then, add it to your `gulpfile.js`:
 
 ### Simple string replace
+
+gulp 3
+
 ```javascript
 const replace = require('gulp-replace');
 
@@ -22,7 +28,25 @@ gulp.task('templates', function(){
 });
 ```
 
+gulp 4
+
+```javascript
+const replace = require('gulp-replace');
+const { src, dest } = require('gulp');
+
+function replaceTemplate() {
+  src(['file.txt'])
+    .pipe(replace('bar', 'foo'))
+    .pipe(dest('build/'));
+};
+
+exports.replaceTemplate = replaceTemplate;
+```
+
 ### Simple regex replace
+
+gulp 3
+
 ```javascript
 const replace = require('gulp-replace');
 
@@ -34,7 +58,24 @@ gulp.task('templates', function(){
 });
 ```
 
+gulp 4
+
+```javascript
+const replace = require('gulp-replace');
+const { src, dest } = require('gulp');
+
+function replaceTemplate() {
+  return src(['file.txt'])
+      // See https://mdn.io/string.replace#Specifying_a_string_as_a_parameter
+      .pipe(replace(/foo(.{3})/g, '$1foo'))
+      .pipe(dest('build/'));
+};
+
+exports.replaceTemplate = replaceTemplate;
+```
+
 ### String replace with function callback
+
 ```javascript
 const replace = require('gulp-replace');
 
@@ -48,7 +89,25 @@ gulp.task('templates', function(){
 });
 ```
 
+gulp 4
+
+```javascript
+const replace = require('gulp-replace');
+const { src, dest } = require('gulp');
+
+function replaceTemplate() {
+  return src(['file.txt'])
+    .pipe(replace('foo', match => match.reverse()))
+    .pipe(dest('build/'))
+};
+
+exports.replaceTemplate = replaceTemplate;
+```
+
 ### Regex replace with function callback
+
+gulp 3
+
 ```javascript
 const replace = require('gulp-replace');
 
@@ -64,7 +123,30 @@ gulp.task('templates', function(){
 });
 ```
 
+gulp 4
+
+```javascript
+const replace = require('gulp-replace');
+const { src, dest } = require('gulp');
+
+function replaceTemplate() {
+  return src(['file.txt'])
+    .pipe(replace(/foo(.{3})/g, (match, p1, offset, string) => {
+      // Replace foobaz with barbaz and log a ton of information
+      // See https://mdn.io/string.replace#Specifying_a_function_as_a_parameter
+      console.log('Found ' + match + ' with param ' + p1 + ' at ' + offset + ' inside of ' + string);
+      return 'bar' + p1;
+    }))
+    .pipe(dest('build/'));
+};
+
+exports.replaceTemplate = replaceTemplate;
+```
+
 ### Function callback with file object
+
+gulp 3
+
 ```javascript
 const replace = require('gulp-replace');
 
@@ -80,6 +162,25 @@ gulp.task('templates', function(){
 });
 ```
 
+gulp 4
+
+```javascript
+const replace = require('gulp-replace');
+const { src, dest } = require('gulp');
+
+function replaceTemplate() {
+  return src(['file.txt'])
+    .pipe(replace('filename', () => {
+         // Replaces instances of "filename" with "file.txt"
+         // this.file is also available for regex replace
+         // See https://github.com/gulpjs/vinyl#instance-properties for details on available properties
+         return this.file.relative;
+       }))
+    .pipe(dest('build/'));
+};
+
+exports.replaceTemplate = replaceTemplate;
+```
 
 ## API
 
@@ -88,11 +189,13 @@ gulp.task('templates', function(){
 ### replace(string, replacement[, options])
 
 #### string
+
 Type: `String`
 
 The string to search for.
 
 #### replacement
+
 Type: `String` or `Function`
 
 The replacement string or function. If `replacement` is a function, it will be called once for each match and will be passed the string that is to be replaced.
@@ -102,11 +205,13 @@ The value of `this.file` will be equal to the [vinyl instance](https://github.co
 ### replace(regex, replacement[, options])
 
 #### regex
+
 Type: `RegExp`
 
 The regex pattern to search for. See the [MDN documentation for RegExp] for details.
 
 #### replacement
+
 Type: `String` or `Function`
 
 The replacement string or function. See the [MDN documentation for String.replace] for details on special replacement string patterns and arguments to the replacement function.
@@ -118,14 +223,15 @@ The value of `this.file` will be equal to the [vinyl instance](https://github.co
 An optional third argument, `options`, can be passed.
 
 #### options
+
 Type: `Object`
 
 ##### options.skipBinary
+
 Type: `boolean`  
 Default: `true`
 
 Skip binary files. This option is `true` by default. If you want to replace content in binary files, you must explicitly set it to `false`.
-
 
 [MDN documentation for RegExp]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp
 [MDN documentation for String.replace]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace#Specifying_a_string_as_a_parameter
