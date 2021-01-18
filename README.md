@@ -35,7 +35,7 @@ const replace = require('gulp-replace');
 const { src, dest } = require('gulp');
 
 function replaceTemplate() {
-  src(['file.txt'])
+  return src(['file.txt'])
     .pipe(replace('bar', 'foo'))
     .pipe(dest('build/'));
 };
