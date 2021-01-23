@@ -2,8 +2,6 @@
 
 > A string replace plugin for gulp
 
-[Read me for gulp 3](README-gulp3.md)
-
 ## Usage
 
 First, install `gulp-replace` as a development dependency:
