@@ -6,24 +6,26 @@ This example shows you how to replace file contents in place.
 
 Type the following commands from the root of this repository:
 
-```
+```bash
 npm install # install the plugin's dependencies
 cd examples/inplace
 npm install # install the example's dependencies
 cat file.txt # See original file contentes
-gulp
+npx gulp
 cat file.txt # See changed file contents
 ```
+
 You should see something like this:
 
-```js
+```bash
 $ cat file.txt
 The roof is on fire!
-$ gulp
-[gulp] Starting 'replace'...
-[gulp] Finished 'replace' after 19 ms
-[gulp] Starting 'default'...
-[gulp] Finished 'default' after 8.01 μs
+
+$ npx gulp
+23:03:34] Using gulpfile ~/gulp-replace/examples/inplace/gulpfile.js
+[23:03:34] Starting 'default'...
+[23:03:34] Finished 'default' after 31 ms
+
 $ cat file.txt
 The world is on fire!
 ```

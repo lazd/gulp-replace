@@ -2,8 +2,6 @@
 
 > A string replace plugin for gulp
 
-[Read me for gulp 3](README-gulp3.md)
-
 ## Usage
 
 First, install `gulp-replace` as a development dependency:
@@ -20,86 +18,74 @@ Then, add it to your `gulpfile.js`:
 
 ```javascript
 const replace = require('gulp-replace');
-const { src, dest } = require('gulp');
 
-function replaceTemplate() {
-  return src(['file.txt'])
+gulp.task('templates', function(){
+  gulp.src(['file.txt'])
     .pipe(replace('bar', 'foo'))
-    .pipe(dest('build/'));
-};
-
-exports.replaceTemplate = replaceTemplate;
+    .pipe(gulp.dest('build/'));
+});
 ```
 
 ### Simple regex replace
 
 ```javascript
 const replace = require('gulp-replace');
-const { src, dest } = require('gulp');
 
-function replaceTemplate() {
-  return src(['file.txt'])
-      // See https://mdn.io/string.replace#Specifying_a_string_as_a_parameter
-      .pipe(replace(/foo(.{3})/g, '$1foo'))
-      .pipe(dest('build/'));
-};
-
-exports.replaceTemplate = replaceTemplate;
+gulp.task('templates', function(){
+  gulp.src(['file.txt'])
+    // See https://mdn.io/string.replace#Specifying_a_string_as_a_parameter
+    .pipe(replace(/foo(.{3})/g, '$1foo'))
+    .pipe(gulp.dest('build/'));
+});
 ```
 
 ### String replace with function callback
 
 ```javascript
 const replace = require('gulp-replace');
-const { src, dest } = require('gulp');
 
-function replaceTemplate() {
-  return src(['file.txt'])
-    .pipe(replace('foo', function handleReplace(match){ return match.reverse(); })
-    .pipe(dest('build/'))
-};
-
-exports.replaceTemplate = replaceTemplate;
+gulp.task('templates', function(){
+  gulp.src(['file.txt'])
+    .pipe(replace('foo', function(match) {
+      // Replaces instances of "foo" with "oof"
+      return match.reverse();
+    }))
+    .pipe(gulp.dest('build/'));
+});
 ```
 
 ### Regex replace with function callback
 
 ```javascript
 const replace = require('gulp-replace');
-const { src, dest } = require('gulp');
 
-function replaceTemplate() {
-  return src(['file.txt'])
-    .pipe(replace(/foo(.{3})/g, function handleReplace(match, p1, offset, string) {
+gulp.task('templates', function(){
+  gulp.src(['file.txt'])
+    .pipe(replace(/foo(.{3})/g, function(match, p1, offset, string) {
       // Replace foobaz with barbaz and log a ton of information
       // See https://mdn.io/string.replace#Specifying_a_function_as_a_parameter
       console.log('Found ' + match + ' with param ' + p1 + ' at ' + offset + ' inside of ' + string);
       return 'bar' + p1;
     }))
-    .pipe(dest('build/'));
-};
-
-exports.replaceTemplate = replaceTemplate;
+    .pipe(gulp.dest('build/'));
+});
 ```
 
 ### Function callback with file object
 
 ```javascript
 const replace = require('gulp-replace');
-const { src, dest } = require('gulp');
 
-function replaceTemplate() {
-  return src(['file.txt'])
-    .pipe(replace('filename', function handleReplace() {
-         // Replaces instances of "filename" with "file.txt"
-         // this.file is also available for regex replace
-         // See https://github.com/gulpjs/vinyl#instance-properties for details on available properties
-         return this.file.relative;
-       }))
-    .pipe(dest('build/'));
-};
-
-exports.replaceTemplate = replaceTemplate;
+gulp.task('templates', function(){
+  gulp.src(['file.txt'])
+    .pipe(replace('filename', function() {
+      // Replaces instances of "filename" with "file.txt"
+      // this.file is also available for regex replace
+      // See https://github.com/gulpjs/vinyl#instance-properties for details on available properties
+      return this.file.relative;
+    }))
+    .pipe(gulp.dest('build/'));
+});
 ```
 
 ## API
@@ -107,8 +93,6 @@ exports.replaceTemplate = replaceTemplate;
 `gulp-replace` can be called with a string or regex.
 
 ### replace(string, replacement[, options])
-
-> CAUTION: `replacement` could **NOT be arrow function**, because arrow function could not bind `this`
 
 #### string
 

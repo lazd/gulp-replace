@@ -1,21 +1,21 @@
 'use strict';
 
-var replacePlugin = require('../');
-var fs = require('fs');
-var should = require('should');
-var File = require('vinyl');
+const replacePlugin = require('../');
+const fs = require('fs');
+const should = require('should');
+const File = require('vinyl');
 
 describe('gulp-replace', function() {
   describe('real world use cases', function() {
     it('drop use strict on a buffer', function(done) {
-      var file = new File({
+      const file = new File({
         path: 'test/fixtures/strict.js',
         cwd: 'test/',
         base: 'test/fixtures',
         contents: fs.readFileSync('test/fixtures/strict.js')
       });
 
-      var stream = replacePlugin(/\s*(('use strict')|("use strict"));?/g, '');
+      const stream = replacePlugin(/\s*(('use strict')|("use strict"));?/g, '');
       stream.on('data', function(newFile) {
         should.exist(newFile);
         should.exist(newFile.contents);
@@ -29,20 +29,20 @@ describe('gulp-replace', function() {
     });
 
     it('replace script versions in HTML', function(done) {
-      var file = new File({
+      const file = new File({
         path: 'test/fixtures/scriptpage.html',
         cwd: 'test/',
         base: 'test/fixtures',
         contents: fs.readFileSync('test/fixtures/scriptpage.html')
       });
 
-      var versions = {
+      const versions = {
         'jquery': '2.1.1',
         'react': '0.10.0'
       };
 
       function replaceByVersion(match, packageName, offset, string) {
-        var version = versions[packageName];
+        const version = versions[packageName];
         // @todo Read in actual installed version of package
         // It will not match when using jquery: ^2.1.1 in package.json
 
@@ -55,7 +55,7 @@ describe('gulp-replace', function() {
         }
       }
 
-      var stream = replacePlugin(/-@@(.*?)Ver/g, replaceByVersion);
+      const stream = replacePlugin(/-@@(.*?)Ver/g, replaceByVersion);
       stream.on('data', function(newFile) {
         should.exist(newFile);
         should.exist(newFile.contents);
