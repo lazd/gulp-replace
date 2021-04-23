@@ -1,4 +1,9 @@
 sudo: false
 language: node_js
 node_js:
+  - "node"
   - "lts/*"
+  - "8.x"
+  - "10.x"
+  - "12.x"
+  - "14.x"
