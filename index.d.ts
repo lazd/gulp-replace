@@ -16,8 +16,9 @@
  *                     you want to replace content in binary files, you must explicitly set it to false</p>
  *
  */
-export declare function replace(
+declare function replace(
     search: string | RegExp,
     _replacement: string | (() => string) | ((search: string, ...args: any[]) => string),
     options?: { skipBinary: boolean }
 ): any; /* The type of return value should not be `any`, but I could not find the types definition of  */
+export default replace;
