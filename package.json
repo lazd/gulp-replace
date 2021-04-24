@@ -3,6 +3,7 @@
   "version": "1.1.1",
   "description": "A string replace plugin for gulp",
   "dependencies": {
+    "@types/node": "^14.14.41",
     "istextorbinary": "^3.0.0",
     "replacestream": "^4.0.3",
     "yargs-parser": ">=5.0.0-security.0"

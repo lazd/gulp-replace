@@ -1,3 +1,4 @@
+/// <reference types="node" />
 /**
  * replace
  * gulp-replace can be called with a string or regex.
@@ -20,6 +21,4 @@ declare function replace(
     search: string | RegExp,
     _replacement: string | (() => string) | ((search: string, ...args: any[]) => string),
     options?: { skipBinary: boolean }
-): any; /* The type of return value should not be `any`, but I could not find the types definition of  */
-
-export = replace;
+): NodeJS.ReadWriteStream;
