@@ -22,3 +22,5 @@ declare function replace(
     replacement: string | (() => string) | ((search: string, ...args: any[]) => string),
     options?: { skipBinary: boolean }
 ): NodeJS.ReadWriteStream;
+
+export = replace;
