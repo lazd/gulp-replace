@@ -1,7 +1,10 @@
 'use strict';
 
 const replacePlugin = require('../');
+const { spawnSync } = require('child_process');
 const fs = require('fs');
+const npmWhich = require('npm-which');
+const { join } = require('path');
 const should = require('should');
 const File = require('vinyl');
 
@@ -66,6 +69,18 @@ describe('gulp-replace', function() {
 
       stream.write(file);
       stream.end();
+    });
+
+    it('run `gulp-replace` using typescript', function() {
+      this.slow(5 * 1000);
+
+      const spawnResult = spawnSync(
+        npmWhich(__dirname).sync('ts-node'),
+        [
+          join(__dirname, 'fixtures', 'script.ts')
+        ]);
+
+      should.equal(spawnResult.status, 0);
     });
   });
 });
