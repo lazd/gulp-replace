@@ -1,9 +1,15 @@
 /// <reference types="node" />
+import type File = require("vinyl");
+
 interface Options {
     skipBinary?: boolean
 }
 
-type Replacer = (match: string, ...args: any[]) => string;
+interface ReplacerContext {
+    file: File
+}
+
+type Replacer = (this: ReplacerContext, match: string, ...args: any[]) => string;
 
 /**
  * Searches and replaces a portion of text using a `string` or a `RegExp`.
