@@ -1,14 +1,29 @@
 /// <reference types="node" />
 import type File = require("vinyl");
 
+/**
+ * Represents options for `gulp-replace`.
+ */
 interface Options {
+    /**
+     * A value indicating whether binary files should be skipped.
+     */
     skipBinary?: boolean
 }
 
+/**
+ * The context of the replacer-function.
+ */
 interface ReplacerContext {
+    /**
+     * The file being processed.
+     */
     file: File
 }
 
+/**
+ * Represents a method for replacing contents of a vinyl-file.
+ */
 type Replacer = (this: ReplacerContext, match: string, ...args: any[]) => string;
 
 /**
