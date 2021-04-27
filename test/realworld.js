@@ -73,6 +73,7 @@ describe('gulp-replace', function() {
 
     it('run `gulp-replace` using typescript', function() {
       this.slow(5 * 1000);
+      this.timeout(10 * 1000);
 
       const spawnResult = spawnSync(
         npmWhich(__dirname).sync('ts-node'),
