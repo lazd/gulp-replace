@@ -19,7 +19,7 @@
  */
 declare function replace(
     search: string | RegExp,
-    replacement: string | ((search: string, ...args: any[]) => string),
+    replacement: string | ((match: string, ...args: any[]) => string),
     options?: { skipBinary: boolean }
 ): NodeJS.ReadWriteStream;
 
