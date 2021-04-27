@@ -1,4 +1,10 @@
 /// <reference types="node" />
+interface Options {
+    skipBinary: boolean
+}
+
+type Replacer = (match: string, ...args: any[]) => string;
+
 /**
  * Searches and replaces a portion of text using a `string` or a `RegExp`.
  *
@@ -19,8 +25,8 @@
  */
 declare function replace(
     search: string | RegExp,
-    replacement: string | ((match: string, ...args: any[]) => string),
-    options?: { skipBinary: boolean }
+    replacement: string | Replacer,
+    options?: Options
 ): NodeJS.ReadWriteStream;
 
 export = replace;
