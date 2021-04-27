@@ -1,6 +1,6 @@
 /// <reference types="node" />
 interface Options {
-    skipBinary: boolean
+    skipBinary?: boolean
 }
 
 type Replacer = (match: string, ...args: any[]) => string;
