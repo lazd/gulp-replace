@@ -3,7 +3,7 @@
 const Transform = require('stream').Transform;
 const rs = require('replacestream');
 const istextorbinary = require('istextorbinary');
-const Vinyl = require('vinyl')
+
 const defaultOptions = {
   skipBinary: true
 }
@@ -19,7 +19,7 @@ module.exports = function(search, _replacement, options = {}) {
     objectMode: true,
     /**
      * transformation
-     * @param {Vinyl} file 
+     * @param {import("vinyl")} file 
      * @param {BufferEncoding} enc 
      * @param {(error?: Error | null, data?: any) => void} callback 
      */
