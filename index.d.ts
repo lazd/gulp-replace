@@ -1,5 +1,5 @@
 /// <reference types="node" />
-import type File = require("vinyl");
+import File = require("vinyl");
 
 /**
  * Represents options for `gulp-replace`.
