@@ -28,6 +28,14 @@ function replaceTemplate() {
     .pipe(dest('build/'));
 };
 
+// or replace multiple strings
+function replaceTemplate() {
+  return src(['file.txt'])
+    .pipe(replace('bar', 'foo'))
+    .pipe(replace('baz', 'fuz'))
+    .pipe(dest('build/'));
+};
+
 exports.replaceTemplate = replaceTemplate;
 ```
 
