@@ -11,7 +11,7 @@
   },
   "devDependencies": {
     "concat-stream": "^2.0.0",
-    "mocha": "^7.0.0",
+    "mocha": "^10.2.0",
     "npm-which": "^3.0.1",
     "should": "^13.2.3",
     "ts-node": "^9.1.1",
